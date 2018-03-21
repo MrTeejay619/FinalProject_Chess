@@ -1,5 +1,7 @@
 package sample;
 
+import java.util.ArrayList;
+
 abstract class Piece {
 
     String pieceName;
@@ -11,13 +13,11 @@ abstract class Piece {
     int currFile;
 
     // array of legal squares to move to
-    Square[] legalMoves;
+    ArrayList<Square> legalMoves;
 
     //
 
     int worth;
-
-    abstract void move(int rank, int file);
-    abstract Square[] getLegalMoves();
+    abstract ArrayList<Square> getLegalMoves();
 
 }

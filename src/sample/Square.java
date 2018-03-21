@@ -2,7 +2,13 @@ package sample;
 
 public class Square {
     boolean isAttacked;
-    boolean isOccupied;
+    boolean isVacant;
     String color;
-    Piece pieceOnMe;
+    public Piece pieceOnMe;
+
+    Square(){
+        pieceOnMe = null;
+        isVacant = true;
+        isAttacked = false;
+    }
 }

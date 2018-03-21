@@ -15,7 +15,13 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
 
-        Game game = new Game();
+        Player[] p = new Player[2];
+        p[0] = new Player();
+        p[1] = new Player();
+
+
+        Game game = new Game(p,3.0);
+        game.printBoard();
     }
 
 
