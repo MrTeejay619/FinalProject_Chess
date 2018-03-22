@@ -3,9 +3,11 @@ package sample;
 import java.util.ArrayList;
 
 public class Queen extends Piece {
-    Queen(){
+    Queen(int rank, int file){
         worth = 9;
         pieceName = "Q";
+        currRank = rank;
+        currFile = file;
     }
 
     ArrayList<Square> getLegalMoves(){

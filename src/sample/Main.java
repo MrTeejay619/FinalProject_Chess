@@ -22,6 +22,9 @@ public class Main extends Application {
 
         Game game = new Game(p,3.0);
         game.printBoard();
+
+        game.movePiece(game.board[1][0].pieceOnMe, 2, 0);
+        game.printBoard();
     }
 
 

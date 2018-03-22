@@ -29,14 +29,16 @@ public class Game {
     // move is not piece based
     // leaving it in the driver class Game
     public void movePiece(Piece piece, int rank, int file){
-        piece.getLegalMoves();
+        //piece.getLegalMoves();
         // check if move is legal
         // each piece type has its own method for determining legal moves
-        if (piece.legalMoves.contains(board[rank][file])){
+        //if (piece.legalMoves.contains(board[rank][file])){
+
             board[rank][file].pieceOnMe = piece;
+            board[piece.currRank][piece.currFile].pieceOnMe = null;
             piece.currRank = rank;
             piece.currFile = file;
-        }
+        //}
     }
     public void startBoard(Player[] players, double time){
         // randomly assign one player as white
@@ -44,33 +46,33 @@ public class Game {
 
         // populate board
         // black starts at top of board
-        board[0][0].pieceOnMe = new Rook();
-        board[0][1].pieceOnMe = new Knight();
-        board[0][2].pieceOnMe = new Bishop();
-        board[0][3].pieceOnMe = new Queen();
-        board[0][4].pieceOnMe = new King();
-        board[0][5].pieceOnMe = new Bishop();
-        board[0][6].pieceOnMe = new Knight();
-        board[0][7].pieceOnMe = new Rook();
+        board[0][0].pieceOnMe = new Rook(0,0);
+        board[0][1].pieceOnMe = new Knight(0,1);
+        board[0][2].pieceOnMe = new Bishop(0,2);
+        board[0][3].pieceOnMe = new Queen(0,3);
+        board[0][4].pieceOnMe = new King(0,4);
+        board[0][5].pieceOnMe = new Bishop(0,5);
+        board[0][6].pieceOnMe = new Knight(0,6);
+        board[0][7].pieceOnMe = new Rook(0,7);
 
         //pawns
         for(int i=0;i<8;i++){
-            board[1][i].pieceOnMe = new Pawn();
+            board[1][i].pieceOnMe = new Pawn(1,i);
         }
 
         // white at bottom
-        board[7][0].pieceOnMe = new Rook();
-        board[7][1].pieceOnMe = new Knight();
-        board[7][2].pieceOnMe = new Bishop();
-        board[7][3].pieceOnMe = new Queen();
-        board[7][4].pieceOnMe = new King();
-        board[7][5].pieceOnMe = new Bishop();
-        board[7][6].pieceOnMe = new Knight();
-        board[7][7].pieceOnMe = new Rook();
+        board[7][0].pieceOnMe = new Rook(7,0);
+        board[7][1].pieceOnMe = new Knight(7,1);
+        board[7][2].pieceOnMe = new Bishop(7,2);
+        board[7][3].pieceOnMe = new Queen(7,3);
+        board[7][4].pieceOnMe = new King(7,4);
+        board[7][5].pieceOnMe = new Bishop(7,5);
+        board[7][6].pieceOnMe = new Knight(7,6);
+        board[7][7].pieceOnMe = new Rook(7,7);
 
         //pawns
         for(int i=0;i<8;i++){
-            board[6][i].pieceOnMe = new Pawn();
+            board[6][i].pieceOnMe = new Pawn(6,i);
         }
 
     }
@@ -87,5 +89,6 @@ public class Game {
             }
             System.out.print('\n');
         }
+        System.out.print('\n');
     }
 }

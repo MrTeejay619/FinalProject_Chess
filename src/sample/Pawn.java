@@ -3,13 +3,12 @@ package sample;
 import java.util.ArrayList;
 
 public class Pawn extends Piece{
-    Pawn(){
-        worth = 1;
-        boolean hasMoved = false;
-        ArrayList<Square> getLegalMoves = new ArrayList<>();
+    Pawn(int rank, int file){
+        worth = 0;
         pieceName = "P";
+        currRank = rank;
+        currFile = file;
     }
-
     ArrayList<Square> getLegalMoves(){
         ArrayList<Square> movesList = new ArrayList<>();
         // forward move
