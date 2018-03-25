@@ -35,9 +35,12 @@ public class Game {
         //if (piece.legalMoves.contains(board[rank][file])){
 
             board[rank][file].pieceOnMe = piece;
+            board[rank][file].isVacant = false;
             board[piece.currRank][piece.currFile].pieceOnMe = null;
+            board[piece.currRank][piece.currFile].isVacant = true;
             piece.currRank = rank;
             piece.currFile = file;
+
         //}
     }
     public void startBoard(Player[] players, double time){

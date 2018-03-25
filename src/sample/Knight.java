@@ -12,6 +12,7 @@ public class Knight extends Piece{
     ArrayList<Square> getLegalMoves(){
         ArrayList<Square> movesList = new ArrayList<>();
         // forward move
+        if (board)
 
         return movesList;
     }

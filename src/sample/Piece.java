@@ -12,7 +12,7 @@ abstract class Piece {
     // array of legal squares to move to
     ArrayList<Square> legalMoves;
     int worth;
-    abstract ArrayList<Square> getLegalMoves();
+    abstract ArrayList<Square> getLegalMoves(Game game);
 
 
 }

@@ -13,6 +13,7 @@ public class King extends Piece {
         ArrayList<Square> movesList = new ArrayList<>();
         // forward move
 
+
         return movesList;
     }
 }
