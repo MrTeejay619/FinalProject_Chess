@@ -10,7 +10,7 @@ public class Rook extends Piece {
         currFile = file;
 
     }
-    ArrayList<Square> getLegalMoves(){
+    ArrayList<Square> getLegalMoves(Game game){
         ArrayList<Square> movesList = new ArrayList<>();
         // forward move
 

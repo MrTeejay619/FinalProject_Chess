@@ -1,9 +1,9 @@
 package sample;
 
 public class Square {
-    boolean isAttacked;
-    boolean isVacant;
-    String color;
+    public boolean isAttacked;
+    public boolean isVacant;
+    public String color;
     public Piece pieceOnMe;
 
     Square(){

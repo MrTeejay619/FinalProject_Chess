@@ -9,10 +9,9 @@ public class Knight extends Piece{
         currRank = rank;
         currFile = file;
     }
-    ArrayList<Square> getLegalMoves(){
+    ArrayList<Square> getLegalMoves(Game game){
         ArrayList<Square> movesList = new ArrayList<>();
         // forward move
-        if (board)
 
         return movesList;
     }

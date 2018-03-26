@@ -9,7 +9,7 @@ public class Bishop extends Piece {
         currRank = rank;
         currFile = file;
     }
-    ArrayList<Square> getLegalMoves(){
+    ArrayList<Square> getLegalMoves(Game game){
         ArrayList<Square> movesList = new ArrayList<>();
         // forward move
 
