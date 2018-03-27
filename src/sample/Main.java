@@ -20,7 +20,7 @@ public class Main extends Application {
         p[1] = new Player();
 
 
-        Game game = new Game(p,3.0);
+        Game game = new Game(p);
         game.printBoard();
 
         game.movePiece(game.board[1][0].pieceOnMe, 2, 0);

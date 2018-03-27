@@ -1,7 +1,7 @@
 package sample;
 
 public class Square {
-    public boolean isAttacked;
+    public String attackedBy;
     public boolean isVacant;
     public String color;
     public Piece pieceOnMe;
@@ -9,6 +9,7 @@ public class Square {
     Square(){
         pieceOnMe = null;
         isVacant = true;
-        isAttacked = false;
+        attackedBy = "";
     }
 }
+

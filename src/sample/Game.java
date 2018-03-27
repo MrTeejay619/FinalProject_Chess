@@ -6,11 +6,9 @@ import java.util.Random;
 public class Game {
     public Square[][] board;
     public Player player1;
-    public Player player2;
-    public static double timeControl;
+    public Player player2;;
 
-    Game(Player[] players, double time){
-        timeControl = time;
+    Game(Player[] players){
         board = new Square[8][8];
         for (int i =0; i < 8; i++){
             for (int j =0; j < 8; j++){
@@ -24,7 +22,27 @@ public class Game {
                 board[i][j] = sqr;
             }
         }
-        startBoard(players, time);
+        startBoard(players);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (players[0].color == "White"){
+                    players[0].myPieces.add(board[j][i].pieceOnMe);
+                } else {
+                    players[1].myPieces.add(board[j][i].pieceOnMe);
+                }
+
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            for (int j = 6; j < 8; j++) {
+                if (players[0].color == "Black"){
+                    players[0].myPieces.add(board[j][i].pieceOnMe);
+                } else {
+                    players[1].myPieces.add(board[j][i].pieceOnMe);
+                }
+
+            }
+        }
     }
     // move is not piece based
     // leaving it in the driver class Game
@@ -43,9 +61,11 @@ public class Game {
 
         //}
     }
-    public void startBoard(Player[] players, double time){
+    public void startBoard(Player[] players){
         // randomly assign one player as white
-        players[new Random().nextInt(2)].color = "White";
+        int rand = new Random().nextInt(2);
+        players[rand].color = "White";
+        players[rand].myTurn = true;
 
         // populate board
         // black starts at top of board

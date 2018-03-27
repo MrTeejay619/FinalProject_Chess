@@ -8,6 +8,7 @@ abstract class Piece {
     String color;
     int currRank;
     int currFile;
+    boolean hasMoved;
 
     // array of legal squares to move to
     ArrayList<Square> legalMoves;
