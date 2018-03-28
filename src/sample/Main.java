@@ -29,7 +29,18 @@ public class Main extends Application {
 
         Board board = new Board();
 
-        gp = board.drawBoard(gp);
+        gp = board.drawBoard(gp); //Calls drawBoard from the Board Class
+
+        //top left is 0,0
+        //Bottom Right is 7,7
+
+
+        for (int i = 0 ; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board.addPane(gp,i, j); //Calls the addPane from board Class, which returns what tile was clicked.
+
+            }
+        }
 
 
         primaryStage.setTitle("Hello World");
