@@ -8,7 +8,7 @@ import javafx.scene.layout.*;
 
 public class Board {
 
-    public GridPane drawBoard(GridPane root){
+    public GridPane drawBoard(GridPane gp){
         final int size = 8 ;
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col ++) {
@@ -20,14 +20,22 @@ public class Board {
                     color = "gray";
                 }
                 square.setStyle("-fx-background-color: "+color+";");
-                root.add(square, col, row);
+                gp.add(square, col, row);
             }
         }
         for (int i = 0; i < size; i++) {
-            root.getColumnConstraints().add(new ColumnConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
-            root.getRowConstraints().add(new RowConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
+            gp.getColumnConstraints().add(new ColumnConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
+            gp.getRowConstraints().add(new RowConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
-        return root;
+        return gp;
+    }
+
+    public void addPane(GridPane gp,int colIndex, int rowIndex) {
+        Pane pane = new Pane();
+        pane.setOnMouseClicked(e -> {
+            System.out.printf("Mouse enetered cell [%d, %d]%n", colIndex, rowIndex);
+        });
+        gp.add(pane, colIndex, rowIndex);
     }
 
 
