@@ -61,64 +61,79 @@ public class Game implements Pieces{
             if (player.myTurn){
                 if (player.color.equals(piece.color)){
                     if (piece.legalMoves.contains(board[rank][file])){
-                        // make move
-                        Piece taken;
-                        // check if en passent
-                        if (piece.pieceName.equals("P") && file != piece.currFile && board[rank][file].isVacant){
-                            if (piece.color.equals("Black")){
-                                taken = board[rank - 1][file].pieceOnMe;
-                            } else {
-                                taken = board[rank + 1][file].pieceOnMe;
-                            }
+                        // check if castle move
+                        if (piece.pieceName.equals("K") && abs(file - piece.currFile) > 1){
+                            castle(piece, file);
                         } else {
-                            taken = board[rank][file].pieceOnMe;
-                        }
-                        board[rank][file].pieceOnMe = piece;
-                        board[rank][file].isVacant = false;
-                        board[piece.currRank][piece.currFile].pieceOnMe = null;
-                        board[piece.currRank][piece.currFile].isVacant = true;
-                        int oldRank = piece.currRank;
-                        int oldFile = piece.currFile;
-                        piece.currRank = rank;
-                        piece.currFile = file;
-                        // check if king is in check after move
-                        this.accept(new ChessBoardMoveVisitor(), this, player);
-
-                        if (player.inCheck){
-                            // revert to previous position
-                            piece.currRank = oldRank;
-                            piece.currFile = oldFile;
-
-                            board[piece.currRank][piece.currFile].pieceOnMe = piece;
-                            board[piece.currRank][piece.currFile].isVacant = false;
-
-                            if (taken != null){
-                                board[taken.currRank][taken.currFile].pieceOnMe = taken;
+                            // make move
+                            Piece taken;
+                            // check if en passent
+                            if (piece.pieceName.equals("P") && file != piece.currFile && board[rank][file].isVacant){
+                                if (piece.color.equals("Black")){
+                                    taken = board[rank - 1][file].pieceOnMe;
+                                } else {
+                                    taken = board[rank + 1][file].pieceOnMe;
+                                }
                             } else {
-                                board[rank][file].pieceOnMe = null;
-                                board[rank][file].isVacant = true;
+                                taken = board[rank][file].pieceOnMe;
                             }
+                            board[rank][file].pieceOnMe = piece;
+                            board[rank][file].isVacant = false;
+                            board[piece.currRank][piece.currFile].pieceOnMe = null;
+                            board[piece.currRank][piece.currFile].isVacant = true;
+                            int oldRank = piece.currRank;
+                            int oldFile = piece.currFile;
+                            piece.currRank = rank;
+                            piece.currFile = file;
+                            // check if king is in check after move
+                            this.accept(new ChessBoardMoveVisitor(), this, getOpponent(piece.color));
 
-                            // TODO alert
-                            System.out.println("Not Legal Move");
-                        } else {
-                            piece.hasMoved = true;
-                            piece.lastMove = abs(oldRank - piece.currRank);
-                            if (taken !=  null) {
-                                player.piecesCaptured.add(taken);
-                                this.getOpponent(piece.color).myPieces.remove(taken);
+                            if (player.inCheck){
+                                // revert to previous position
+                                piece.currRank = oldRank;
+                                piece.currFile = oldFile;
+
+                                board[piece.currRank][piece.currFile].pieceOnMe = piece;
+                                board[piece.currRank][piece.currFile].isVacant = false;
+
+                                if (taken != null){
+                                    board[taken.currRank][taken.currFile].pieceOnMe = taken;
+                                } else {
+                                    board[rank][file].pieceOnMe = null;
+                                    board[rank][file].isVacant = true;
+                                }
+
+                                // TODO alert
+                                System.out.println("Not Legal Move");
+                            } else {
+                                piece.hasMoved = true;
+                                piece.lastMove = abs(oldRank - piece.currRank);
+                                if (taken !=  null) {
+                                    player.piecesCaptured.add(taken);
+                                    this.getOpponent(piece.color).myPieces.remove(taken);
+                                }
+
+                                // check for promotion
+                                if (piece.pieceName.equals("P")){
+                                    if (rank == 0 && piece.color.equals("White")){
+                                        promote(piece);
+                                    } else if (rank == 7 && piece.color.equals("Black")){
+                                        promote(piece);
+                                    }
+                                }
+
+                                this.accept(new ChessBoardMoveVisitor(), this, player);
+
+                                // not my turn anymore
+                                player.myTurn = false;
+                                // other guy's turn
+                                this.getOpponent(piece.color).myTurn = true;
+
+                                // TODO update server side board
                             }
-
-                            // not my turn anymore
-                            player.myTurn = false;
-                            // other guy's turn
-                            this.getOpponent(piece.color).myTurn = true;
-
-                            // TODO update server side board
+                            // TODO re-render board()
                         }
 
-
-                        // TODO re-render board()
 
                     } else {
                         // TODO alert
@@ -309,5 +324,59 @@ public class Game implements Pieces{
         }
 
         return check;
+    }
+
+    public void castle(Piece piece, int file){
+        if (file < piece.currFile){
+            // Queen side
+            board[piece.currRank][2].pieceOnMe = piece;
+            board[piece.currRank][3].pieceOnMe = board[piece.currRank][0].pieceOnMe;
+            board[piece.currRank][3].pieceOnMe.currFile = 3;
+            board[piece.currRank][2].pieceOnMe.currFile = 2;
+            board[piece.currRank][3].pieceOnMe.hasMoved = true;
+            board[piece.currRank][2].pieceOnMe.hasMoved = true;
+
+            board[piece.currRank][0].pieceOnMe = null;
+            board[piece.currRank][4].pieceOnMe = null;
+        } else {
+            // King side
+            board[piece.currRank][6].pieceOnMe = piece;
+            board[piece.currRank][5].pieceOnMe = board[piece.currRank][7].pieceOnMe;
+            board[piece.currRank][5].pieceOnMe.currFile = 5;
+            board[piece.currRank][6].pieceOnMe.currFile = 6;
+            board[piece.currRank][5].pieceOnMe.hasMoved = true;
+            board[piece.currRank][6].pieceOnMe.hasMoved = true;
+
+            board[piece.currRank][7].pieceOnMe = null;
+            board[piece.currRank][4].pieceOnMe = null;
+        }
+    }
+
+    public void promote(Piece piece){
+        // TODO implement pop up that returns string ("Q", "B", "N", "R")
+        // selected = popUpFunction();
+        // switch(selected) {
+        //     case "N":
+        //         Piece temp = new Knight(piece.currRank, piece.currFile, piece.color);
+        //         break;
+        //     case "B":
+        //         Piece temp = new Bishop(piece.currRank, piece.currFile, piece.color);
+        //         break;
+        //     case "R":
+        //         Piece temp = new Rook(piece.currRank, piece.currFile, piece.color);
+        //         break;
+        //     case "Q":
+        //         Piece temp = new Queen(piece.currRank, piece.currFile, piece.color);
+        //         break;
+
+        // for now just queen
+        Piece temp = new Queen(piece.currRank, piece.currFile, piece.color);
+        // add to players piece list
+        getPlayer(piece.color).myPieces.add(temp);
+        // add to board
+        board[piece.currRank][piece.currFile].pieceOnMe = temp;
+        // remove pawn from player piece list
+        getPlayer(piece.color).myPieces.remove(piece);
+
     }
 }

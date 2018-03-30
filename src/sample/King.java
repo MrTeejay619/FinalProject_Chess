@@ -91,6 +91,74 @@ public class King extends Piece implements Pieces {
             }
         }
 
+        // castle
+        // white
+        if (color.equals("White")){
+            if (!hasMoved && !game.getPlayer(color).inCheck){
+                // Queen side
+                if (!game.board[7][0].isVacant){
+                    // check that the piece is a rook and that it hasn't moved
+                    if (game.board[7][0].pieceOnMe.pieceName.equals("R") && !game.board[7][0].pieceOnMe.hasMoved){
+                        // check if the two squares the king moves on are attacked
+                        if (!game.getOpponentTargets(color).contains(game.board[currRank][currFile - 1])
+                                && game.board[currRank][currFile - 1].isVacant
+                                && !game.getOpponentTargets(color).contains(game.board[currRank][currFile - 2])
+                                && game.board[currRank][currFile - 2].isVacant){
+                            legalMoves.add(game.board[currRank][currFile - 2]);
+                        }
+                    }
+                }
+
+                // king side
+                if (!game.board[7][7].isVacant){
+                    // check that the piece is a rook and that it hasn't moved
+                    if (game.board[7][7].pieceOnMe.pieceName.equals("R") && !game.board[7][7].pieceOnMe.hasMoved){
+                        // check if the two squares the king moves on are attacked
+                        if (!game.getOpponentTargets(color).contains(game.board[currRank][currFile + 1])
+                                && game.board[currRank][currFile + 1].isVacant
+                                && !game.getOpponentTargets(color).contains(game.board[currRank][currFile + 2])
+                                && game.board[currRank][currFile + 2].isVacant){
+                            legalMoves.add(game.board[currRank][currFile + 2]);
+                        }
+                    }
+                }
+
+            }
+        } else {
+            if (!hasMoved && !game.getPlayer(color).inCheck){
+                // Queen side
+                if (!game.board[0][0].isVacant){
+                    // check that the piece is a rook and that it hasn't moved
+                    if (game.board[0][0].pieceOnMe.pieceName.equals("R") && !game.board[0][0].pieceOnMe.hasMoved){
+                        // check if the two squares the king moves on are attacked
+                        if (!game.getOpponentTargets(color).contains(game.board[currRank][currFile - 1])
+                                && game.board[currRank][currFile - 1].isVacant
+                                && !game.getOpponentTargets(color).contains(game.board[currRank][currFile - 2])
+                                && game.board[currRank][currFile - 2].isVacant){
+                            legalMoves.add(game.board[currRank][currFile - 2]);
+                        }
+                    }
+                }
+
+                // king side
+                if (!game.board[0][7].isVacant){
+                    // check that the piece is a rook and that it hasn't moved
+                    if (game.board[0][7].pieceOnMe.pieceName.equals("R") && !game.board[0][7].pieceOnMe.hasMoved){
+                        // check if the two squares the king moves on are attacked
+                        if (!game.getOpponentTargets(color).contains(game.board[currRank][currFile + 1])
+                                && game.board[currRank][currFile + 1].isVacant
+                                && !game.getOpponentTargets(color).contains(game.board[currRank][currFile + 2])
+                                && game.board[currRank][currFile + 2].isVacant){
+                            legalMoves.add(game.board[currRank][currFile + 2]);
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+
     }
 
     @Override
