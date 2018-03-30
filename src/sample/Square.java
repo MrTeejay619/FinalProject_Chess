@@ -1,15 +1,17 @@
 package sample;
 
-public class Square {
-    public String attackedBy;
+public class Square{
     public boolean isVacant;
     public String color;
     public Piece pieceOnMe;
+    int rank;
+    int file;
 
-    Square(){
+    Square(int row, int col){
         pieceOnMe = null;
         isVacant = true;
-        attackedBy = "";
+        rank = row;
+        file = col;
     }
 }
 

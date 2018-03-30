@@ -4,26 +4,27 @@ import java.util.ArrayList;
 
 public class Rook extends Piece {
     boolean hasMoved;
-    Rook(int rank, int file){
+    Rook(int rank, int file, String col){
         worth = 5;
         pieceName = "R";
         currRank = rank;
         currFile = file;
         hasMoved = false;
+        color = col;
+        legalMoves = new ArrayList<>();
 
     }
-    ArrayList<Square> getLegalMoves(Game game){
-        ArrayList<Square> movesList = new ArrayList<>();
+    void getLegalMoves(Game game){
         // vertical move
         // straight
         for (int i = 0; i < 8; i++) {
             if(currRank + i < 8){
                 if (game.board[currRank + i][currFile].isVacant){
-                    movesList.add(game.board[currRank + i][currFile]);
-                    game.board[currRank + i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile]);
+                    game.attack(game.board[currRank + i][currFile], this.color);
                 } else if(!game.board[currRank + i][currFile].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank + i][currFile]);
-                    game.board[currRank + i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile]);
+                    game.attack(game.board[currRank + i][currFile], this.color);
                     break;
                 } else {
                     break;
@@ -35,13 +36,13 @@ public class Rook extends Piece {
         }
         // back
         for (int i = 0; i < 8; i++) {
-            if(currRank - i > 0){
+            if(currRank - i >= 0){
                 if (game.board[currRank - i][currFile].isVacant){
-                    movesList.add(game.board[currRank - i][currFile]);
-                    game.board[currRank - i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile]);
+                    game.attack(game.board[currRank - i][currFile], this.color);
                 } else if(!game.board[currRank - i][currFile].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank - i][currFile]);
-                    game.board[currRank - i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile]);
+                    game.attack(game.board[currRank - i][currFile], this.color);
                     break;
                 } else {
                     break;
@@ -54,13 +55,13 @@ public class Rook extends Piece {
         // horizontal move
         // left
         for (int i = 0; i < 8; i++) {
-            if(currFile - i > 0){
+            if(currFile - i >= 0){
                 if (game.board[currRank][currFile - i].isVacant){
-                    movesList.add(game.board[currRank][currFile - i]);
-                    game.board[currRank][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile - i]);
+                    game.attack(game.board[currRank][currFile - i], this.color);
                 } else if(!game.board[currRank][currFile - i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank][currFile - i]);
-                    game.board[currRank][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile - i]);
+                    game.attack(game.board[currRank][currFile - i], this.color);
                     break;
                 } else {
                     break;
@@ -74,11 +75,11 @@ public class Rook extends Piece {
         for (int i = 0; i < 8; i++) {
             if(currFile + i < 8){
                 if (game.board[currRank][currFile + i].isVacant){
-                    movesList.add(game.board[currRank][currFile - i]);
-                    game.board[currRank][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile + i]);
+                    game.attack(game.board[currRank][currFile + i], this.color);
                 } else if(!game.board[currRank][currFile + i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank][currFile + i]);
-                    game.board[currRank][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile + i]);
+                    game.attack(game.board[currRank][currFile + i], this.color);
                     break;
                 } else {
                     break;
@@ -89,6 +90,11 @@ public class Rook extends Piece {
 
         }
 
-        return movesList;
+    }
+
+
+    @Override
+    public void accept(PieceVisitor pieceVisitor, Game game, Player player){
+        pieceVisitor.visit(this, game, player);
     }
 }

@@ -3,32 +3,30 @@ package sample;
 import java.util.ArrayList;
 
 public class Queen extends Piece {
-    Queen(int rank, int file){
+    Queen(int rank, int file, String col){
         worth = 9;
         pieceName = "Q";
         currRank = rank;
         currFile = file;
         hasMoved = false;
+        color = col;
+        legalMoves = new ArrayList<>();
     }
 
-    ArrayList<Square> getLegalMoves(Game game){
-        // add legal squares to a list of legal moves
-        // sets toes squares to attacked
-
-        ArrayList<Square> movesList = new ArrayList<>();
+    void getLegalMoves(Game game){
         // vertical move
         // straight
         for (int i = 0; i < 8; i++) {
             if(currRank + i < 8){
                 if (game.board[currRank + i][currFile].isVacant){
-                    movesList.add(game.board[currRank + i][currFile]);
-                    game.board[currRank + i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile]);
+                    game.attack(game.board[currRank + i][currFile], this.color);
                 } else if(!game.board[currRank + i][currFile].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank + i][currFile]);
-                    game.board[currRank + i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile]);
+                    game.attack(game.board[currRank + i][currFile], this.color);
                     break;
                 } else {
-                    game.board[currRank + i][currFile].attackedBy = this.color;
+                    game.attack(game.board[currRank + i][currFile], this.color);
                     break;
                 }
             } else {
@@ -38,16 +36,16 @@ public class Queen extends Piece {
         }
         // back
         for (int i = 0; i < 8; i++) {
-            if(currRank - i > 0){
+            if(currRank - i >= 0){
                 if (game.board[currRank - i][currFile].isVacant){
-                    movesList.add(game.board[currRank - i][currFile]);
-                    game.board[currRank - i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile]);
+                    game.attack(game.board[currRank - i][currFile], this.color);
                 } else if(!game.board[currRank - i][currFile].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank - i][currFile]);
-                    game.board[currRank - i][currFile].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile]);
+                    game.attack(game.board[currRank - i][currFile], this.color);
                     break;
                 } else {
-                    game.board[currRank - i][currFile].attackedBy = this.color;
+                    game.attack(game.board[currRank - i][currFile], this.color);
                     break;
                 }
             } else {
@@ -58,16 +56,16 @@ public class Queen extends Piece {
         // diagonal moves
         // forward-left
         for (int i = 1; i < 8; i++) {
-            if (currRank +i < 8 && currFile -i > 0){
+            if (currRank +i < 8 && currFile -i >= 0){
                 if (game.board[currRank + i][currFile - i].isVacant){
-                    movesList.add(game.board[currRank + i][currFile - i]);
-                    game.board[currRank + i][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile - i]);
+                    game.attack(game.board[currRank + i][currFile - i], this.color);
                 } else if (!game.board[currRank + i][currFile - i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank + i][currFile - i]);
-                    game.board[currRank + i][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile - i]);
+                    game.attack(game.board[currRank + i][currFile - i], this.color);
                     break;
                 } else {
-                    game.board[currRank + i][currFile - i].attackedBy = this.color;
+                    game.attack(game.board[currRank + i][currFile - i], this.color);
                     break;
                 }
 
@@ -79,14 +77,14 @@ public class Queen extends Piece {
         for (int i = 1; i < 8; i++) {
             if (currRank + i < 8 && currFile + i < 8) {
                 if (game.board[currRank + i][currFile + i].isVacant) {
-                    movesList.add(game.board[currRank + i][currFile + i]);
-                    game.board[currRank + i][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile + i]);
+                    game.attack(game.board[currRank + i][currFile + i], this.color);
                 } else if (!game.board[currRank + i][currFile + i].pieceOnMe.color.equals(this.color)) {
-                    movesList.add(game.board[currRank + i][currFile + i]);
-                    game.board[currRank + i][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank + i][currFile + i]);
+                    game.attack(game.board[currRank + i][currFile + i], this.color);
                     break;
                 } else {
-                    game.board[currRank + i][currFile + i].attackedBy = this.color;
+                    game.attack(game.board[currRank + i][currFile + i], this.color);
                     break;
                 }
 
@@ -97,16 +95,16 @@ public class Queen extends Piece {
 
         // back-left
         for (int i = 1; i < 8; i++) {
-            if (currRank -i > 0 && currFile -i > 0){
+            if (currRank -i >= 0 && currFile -i >= 0){
                 if (game.board[currRank - i][currFile - i].isVacant){
-                    movesList.add(game.board[currRank - i][currFile - i]);
-                    game.board[currRank - i][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile - i]);
+                    game.attack(game.board[currRank - i][currFile - i], this.color);
                 } else if (!game.board[currRank - i][currFile - i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank - i][currFile - i]);
-                    game.board[currRank - i][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile - i]);
+                    game.attack(game.board[currRank - i][currFile - i], this.color);
                     break;
                 } else {
-                    game.board[currRank - i][currFile - i].attackedBy = this.color;
+                    game.attack(game.board[currRank - i][currFile - i], this.color);
                     break;
                 }
 
@@ -116,16 +114,16 @@ public class Queen extends Piece {
         }
         // back-right
         for (int i = 1; i < 8; i++) {
-            if (currRank -i > 0 && currFile -i > 0){
+            if (currRank -i >= 0 && currFile + i < 8){
                 if (game.board[currRank - i][currFile + i].isVacant){
-                    movesList.add(game.board[currRank - i][currFile + i]);
-                    game.board[currRank - i][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile + i]);
+                    game.attack(game.board[currRank - i][currFile + i], this.color);
                 } else if (!game.board[currRank - i][currFile + i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank - i][currFile + i]);
-                    game.board[currRank - i][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank - i][currFile + i]);
+                    game.attack(game.board[currRank - i][currFile + i], this.color);
                     break;
                 } else {
-                    game.board[currRank - i][currFile + i].attackedBy = this.color;
+                    game.attack(game.board[currRank - i][currFile + i], this.color);
                     break;
                 }
 
@@ -136,16 +134,16 @@ public class Queen extends Piece {
         // horizontal move
         // left
         for (int i = 0; i < 8; i++) {
-            if(currFile - i > 0){
+            if(currFile - i >= 0){
                 if (game.board[currRank][currFile - i].isVacant){
-                    movesList.add(game.board[currRank][currFile - i]);
-                    game.board[currRank][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile - i]);
+                    game.attack(game.board[currRank][currFile - i], this.color);
                 } else if(!game.board[currRank][currFile - i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank][currFile - i]);
-                    game.board[currRank][currFile - i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile - i]);
+                    game.attack(game.board[currRank][currFile - i], this.color);
                     break;
                 } else {
-                    game.board[currRank][currFile - i].attackedBy = this.color;
+                    game.attack(game.board[currRank][currFile - i], this.color);
                     break;
                 }
             } else {
@@ -157,14 +155,14 @@ public class Queen extends Piece {
         for (int i = 0; i < 8; i++) {
             if(currFile + i < 8){
                 if (game.board[currRank][currFile + i].isVacant){
-                    movesList.add(game.board[currRank][currFile - i]);
-                    game.board[currRank][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile + i]);
+                    game.attack(game.board[currRank][currFile + i], this.color);
                 } else if(!game.board[currRank][currFile + i].pieceOnMe.color.equals(this.color)){
-                    movesList.add(game.board[currRank][currFile + i]);
-                    game.board[currRank][currFile + i].attackedBy = this.color;
+                    legalMoves.add(game.board[currRank][currFile + i]);
+                    game.attack(game.board[currRank][currFile + i], this.color);
                     break;
                 } else {
-                    game.board[currRank][currFile + i].attackedBy = this.color;
+                    game.attack(game.board[currRank][currFile + i], this.color);
                     break;
                 }
             } else {
@@ -173,6 +171,10 @@ public class Queen extends Piece {
 
         }
 
-        return movesList;
+    }
+
+    @Override
+    public void accept(PieceVisitor pieceVisitor, Game game, Player player){
+        pieceVisitor.visit(this, game, player);
     }
 }
