@@ -13,7 +13,7 @@ public class Pawn extends Piece{
         hasMoved = false;
         color = col;
         legalMoves = new ArrayList<>();
-        image = new Image("Images/Pieces" + this.color +"_"+this.pieceName + ".png");
+        image = new Image("sample/Images/Pieces/" + this.color +"_"+this.pieceName + ".png");
 
     }
     void getLegalMoves(Game game){
