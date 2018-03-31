@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 
 abstract class Piece implements Pieces {
@@ -10,6 +12,7 @@ abstract class Piece implements Pieces {
     int currRank;
     int currFile;
     boolean hasMoved;
+    Image image;
 
 
     // array of legal squares to move to

@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 
 public class Rook extends Piece {
@@ -12,6 +14,7 @@ public class Rook extends Piece {
         hasMoved = false;
         color = col;
         legalMoves = new ArrayList<>();
+        image = new Image("Images/Pieces" + this.color +"_"+this.pieceName + ".png");
 
     }
     void getLegalMoves(Game game){
