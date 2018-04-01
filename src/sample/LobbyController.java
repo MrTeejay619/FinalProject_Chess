@@ -122,6 +122,7 @@ public class LobbyController {
                 out.println(currentUsername);
                 out.flush();
                 socket.shutdownOutput();
+                socket.close();
                 getResponse();
             }
         }
@@ -135,6 +136,7 @@ public class LobbyController {
             Socket socket2 = new Socket(address, port);
             PrintWriter out = new PrintWriter(socket2.getOutputStream());
             out.println("Get Response");
+            out.println(currentUsername);
             out.flush();
             socket2.shutdownOutput();
             BufferedReader in = new BufferedReader(
@@ -148,6 +150,7 @@ public class LobbyController {
                 challenger = in.readLine();
                 break;
             } else if (selection.equals("No Response")) {
+                System.out.println("TEST Response");
                 socket2.shutdownInput();
                 socket2.close();
                 continue;
@@ -155,11 +158,13 @@ public class LobbyController {
         }
         if (selection.equals("Yes")) {
             // TODO: Start new Game
+            System.out.println("YES");
             startGame(colour);
         } else if (selection.equals("No")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     challenger + " has rejected your challenge", ButtonType.OK);
             alert.showAndWait();
+            System.out.println("NO");
         }
 
     }

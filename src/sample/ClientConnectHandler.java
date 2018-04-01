@@ -251,30 +251,37 @@ public class ClientConnectHandler implements Runnable {
         String username = in.readLine();
         Boolean found = false;
 
-        for (String[] c : Server.checks){
-            if(username.equals(c[1])){
-                if(c[0].equals("Yes")){
-                    PrintWriter out = new PrintWriter(socket.getOutputStream());
-                    out.println("Yes");
-                    out.println(c[3]);
-                    out.flush();
-                    socket.shutdownOutput();
-                    found = true;
-                } else if(c[0].equals("No")){
-                    PrintWriter out = new PrintWriter(socket.getOutputStream());
-                    out.println("NO");
-                    out.println(c[2]);
-                    out.flush();
-                    socket.shutdownOutput();
-                    found = true;
-                }
-            }
-        }
-        if(!found){
+        if(Server.checks.isEmpty()){
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             out.println("No Response");
             out.flush();
             socket.shutdownOutput();
+        } else {
+            for (String[] c : Server.checks) {
+                if (c[1].equals(username)) {
+                    if (c[0].equals("Yes")) {
+                        PrintWriter out = new PrintWriter(socket.getOutputStream());
+                        out.println("Yes");
+                        out.println(c[3]);
+                        out.flush();
+                        socket.shutdownOutput();
+                        found = true;
+                    } else if (c[0].equals("No")) {
+                        PrintWriter out = new PrintWriter(socket.getOutputStream());
+                        out.println("NO");
+                        out.println(c[2]);
+                        out.flush();
+                        socket.shutdownOutput();
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                PrintWriter out = new PrintWriter(socket.getOutputStream());
+                out.println("No Response");
+                out.flush();
+                socket.shutdownOutput();
+            }
         }
     }
 
