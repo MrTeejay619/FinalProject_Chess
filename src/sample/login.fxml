@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<TitledPane text="Login" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TitledPane text="Login" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
    <content>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="439.0">
         <columnConstraints>
@@ -29,7 +29,7 @@
             <TextField fx:id="usernameField" text="Enter Username" GridPane.columnIndex="1" />
             <TextField fx:id="portField" text="Enter Port Number" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" onAction="#Login" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" text="Create Account" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Button mnemonicParsing="false" onAction="#createUserScene" text="Create Account" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Username:" />
             <Label text="Password:" GridPane.rowIndex="1" />
             <Label text="Port:" GridPane.rowIndex="2" />
