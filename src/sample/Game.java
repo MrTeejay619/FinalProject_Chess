@@ -54,7 +54,7 @@ public class Game implements Pieces{
     }
     // move is not piece based
     // leaving it in the driver class Game
-    public void movePiece(Player player, Piece piece, int rank, int file){
+    public int movePiece(Player player, Piece piece, int rank, int file){
         // check that the square clicked has a piece
         if  (piece != null){
             // check that it is your turn
@@ -105,6 +105,7 @@ public class Game implements Pieces{
 
                                 // TODO alert
                                 System.out.println("Not Legal Move");
+                                return 0;
                             } else {
                                 piece.hasMoved = true;
                                 piece.lastMove = abs(oldRank - piece.currRank);
@@ -130,6 +131,7 @@ public class Game implements Pieces{
                                 this.getOpponent(piece.color).myTurn = true;
 
                                 // TODO update server side board
+                                return 1;
                             }
                             // TODO re-render board()
                         }
@@ -138,21 +140,27 @@ public class Game implements Pieces{
                     } else {
                         // TODO alert
                         System.out.println("Not Legal Move");
+                        return 2;
                     }
                 } else {
                     // TODO alert
                     System.out.println("not your color");
+                    return 3;
                 }
 
             } else {
                 // TODO alert
                 System.out.println("not " + player.name + "'s turn");
+                return 4;
             }
+
 
         } else {
             // TODO alert
             System.out.println("no piece there");
+            return 5;
         }
+        return 6;
     }
 
 
