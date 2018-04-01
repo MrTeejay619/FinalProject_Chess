@@ -130,28 +130,6 @@ public class Main extends Application {
 
                             System.out.println("TEST 231");
 
-                            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                                public void handle(WindowEvent we) {
-                                    System.out.println("TEST 213");
-                                    if (socket1.isConnected()) {
-                                        System.out.println("TEST 123");
-                                        try {
-                                            socket1.close();
-                                            System.out.println(usernameLogin);
-                                            Socket close = new Socket(address, port);
-                                            PrintWriter out = new PrintWriter(close.getOutputStream());
-                                            out.println("Exit");
-                                            out.println(usernameLogin);
-                                            out.flush();
-                                            close.close();
-                                            System.exit(0);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            });
-
                         } else if (Boolean.valueOf(in.readLine()) == false) {
                             Alert alert = new Alert(Alert.AlertType.ERROR, "The Username and Password is Incorrect", ButtonType.OK);
                             alert.showAndWait();

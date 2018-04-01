@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Server{
 
     private ServerSocket serverSocket;
-    public static ArrayList<User> clientList = new ArrayList<>();
     public static ArrayList<String> activeUsers = new ArrayList<>();
+    public static ArrayList<String> challengeUsers = new ArrayList<>();
 
     public void startServer(){
         new ClientConnectListener().start();

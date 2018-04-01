@@ -52,18 +52,15 @@ public class ClientConnectHandler implements Runnable {
                     createUser();
                     break;
                 case "Get User List":
-                    //getUserList();
-                    System.out.println("test kek");
-                    newClient();
+                    getUserList();
                     break;
                 case "Exit":
                     exitUser();
                     break;
                 case "ServerExit":
-                    serverExit();
+                    // serverExit();
                     break;
                 case "Challenge User":
-                    System.out.println("challenge user");
                     challengeUser();
                     break;
                 case "Start Game":
@@ -105,8 +102,6 @@ public class ClientConnectHandler implements Runnable {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         if(userExist && !alreadyLoggedIn){
             Server.activeUsers.add(username);
-            User temp = new User(username, socket, Integer.valueOf(port));
-            Server.clientList.add(temp);
         }
 
         out.println(alreadyLoggedIn);
@@ -164,23 +159,19 @@ public class ClientConnectHandler implements Runnable {
         socket.shutdownInput();
         ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
         objectOut.writeObject(Server.activeUsers);
-        objectOut.close();
+
+        for (String c : Server.challengeUsers){
+            if()
+        }
     }
 
     public void exitUser() throws IOException{
         String username = in.readLine();
         socket.shutdownInput();
         Server.activeUsers.remove(username);
-        System.out.println("A User just Left");
-        for (User temp2 : Server.clientList){
-            if(temp2.getUsername().equals(username)){
-                Server.clientList.remove(temp2);
-                break;
-            }
-        }
-        newClient();
     }
 
+    /*
     public void serverExit() throws IOException {
         String temp = in.readLine();
         socket.shutdownInput();
@@ -190,32 +181,13 @@ public class ClientConnectHandler implements Runnable {
                 break;
             }
         }
-    }
-
-    public void newClient() throws IOException{
-        String name = in.readLine();
-        System.out.println(name);
-        System.out.println("test kek1");
-        for (User c : Server.clientList){
-            //System.out.println(c.getUsername());
-            //System.out.println("test kek2");
-            Server.writeToAll(c.getSocket().getInetAddress(), c.getPort());
-        }
-    }
+    }*/
 
     public void challengeUser() throws IOException {
         String opponent = in.readLine();
         String challenger = in.readLine();
         socket.shutdownInput();
-
-        for (User c : Server.clientList){
-            if(c.getUsername().equals(opponent)){
-                System.out.println("found challenge user");
-                Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), challenger, "Accept Challenge");
-                break;
-            }
-        }
-
+        Server.challengeUsers.add(opponent);
     }
 
     public void startGame() throws IOException {
@@ -223,6 +195,7 @@ public class ClientConnectHandler implements Runnable {
         String opponent = in.readLine();
         String challenger = in.readLine();
 
+        /*
         if (choice.equals("Yes")){
             for (User c : Server.clientList){
                 if(c.getUsername().equals(opponent)){
@@ -240,6 +213,7 @@ public class ClientConnectHandler implements Runnable {
                 }
             }
         }
+        */
 
     }
 
