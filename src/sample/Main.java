@@ -19,6 +19,7 @@ public class Main extends Application {
     public static String currentUsername;
     public static String address = "localhost";
     public static int port = 1300;
+    public static BoardStage secondStage;
 
 
     @Override
@@ -28,7 +29,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = (Parent)loader.load();
-        Scene scene = new Scene(root, 300, 450);
+        Scene scene = new Scene(root, 439, 230);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -50,6 +51,24 @@ public class Main extends Application {
             }
         });
 
+    }
+
+    public class BoardStage extends Stage{
+        public String myColour;
+
+        BoardStage(String colour){
+            myColour = colour;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("board.fxml"));
+            try {
+                Parent root = (Parent) loader.load();
+                Scene scene = new Scene(root, 300, 450);
+                this.setScene(scene);
+            } catch (IOException e){
+                e.printStackTrace();
+                System.out.println("Failed to load fxml");
+            }
+            this.show();
+        }
     }
 
     public static void main(String[] args) {
