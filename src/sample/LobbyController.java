@@ -180,6 +180,9 @@ public class LobbyController {
 
     public void startGame(String colour) {
 
+        Stage stage = (Stage) tables.getScene().getWindow();
+        stage.hide();
+
     }
 
     public void challengeAccept() throws IOException {

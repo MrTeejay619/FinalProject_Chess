@@ -18,7 +18,6 @@ public class ClientConnectHandler implements Runnable {
     private String password;
     private String username;
     private String selection;
-    private String port;
     //private File register = new File("C:\\Users\\Taabish\\Desktop\\GitHub\\CSCI2020_Taab\\FinalProjectServerTest","register.xml");
     private File register = new File("/home/taabish/Desktop/FinalProject_Chess", "register.xml");
     private ArrayList<User> users = new ArrayList<>();
@@ -86,7 +85,6 @@ public class ClientConnectHandler implements Runnable {
     public void checkUser() throws IOException{
         username = in.readLine();
         password = in.readLine();
-        port = in.readLine();
         socket.shutdownInput();
         Boolean userExist = false;
         Boolean alreadyLoggedIn = false;

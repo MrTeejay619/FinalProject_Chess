@@ -57,7 +57,6 @@ public class LoginController {
                 socket1.shutdownInput();
             } else {
                 if (Boolean.valueOf(in.readLine()) == true) {
-                    // TODO: GO TO New Stage
                     username.clear();
                     password.clear();
 

@@ -19,7 +19,7 @@ public class Main extends Application {
     public static String currentUsername;
     public static String address = "localhost";
     public static int port = 1300;
-    public static BoardStage secondStage;
+    public static String colour;
 
 
     @Override
@@ -33,6 +33,14 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        
+        primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                new BoardStage(colour);
+            }
+        });
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
@@ -50,7 +58,6 @@ public class Main extends Application {
                 }
             }
         });
-
     }
 
     public class BoardStage extends Stage{
