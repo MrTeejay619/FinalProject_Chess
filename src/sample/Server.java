@@ -9,7 +9,8 @@ public class Server{
 
     private ServerSocket serverSocket;
     public static ArrayList<String> activeUsers = new ArrayList<>();
-    public static ArrayList<String> challengeUsers = new ArrayList<>();
+    public static ArrayList<String[]> challengeUsers = new ArrayList<>();
+    public static ArrayList<String[]> checks = new ArrayList<>();
 
     public void startServer(){
         new ClientConnectListener().start();

@@ -53,7 +53,6 @@ public class LoginController {
                 password.clear();
                 System.out.println("closeConnection5");
                 socket1.shutdownInput();
-                closeConnection(socket1);
             } else {
                 if (Boolean.valueOf(in.readLine()) == true) {
                     // TODO: GO TO New Stage
@@ -62,18 +61,9 @@ public class LoginController {
 
                     System.out.println("closeConnection4");
                     socket1.shutdownInput();
-                    closeConnection(socket1);
 
 
                     //primaryStage.close();
-                    Socket socket3 = new Socket(address, port);
-                    PrintWriter outW = new PrintWriter(socket3.getOutputStream());
-                    outW.println("Get User List");
-                    outW.println(usernameLogin);
-                    outW.flush();
-                    System.out.println("closeConnection");
-                    socket3.shutdownInput();
-                    closeConnection(socket3);
 
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("lobby.fxml"));
                     Parent root = (Parent)loader.load();
@@ -90,7 +80,6 @@ public class LoginController {
                     password.clear();
 
                     socket1.shutdownInput();
-                    closeConnection(socket1);
                 }
             }
         } catch (IOException e){
@@ -107,15 +96,5 @@ public class LoginController {
         Stage stage = (Stage) center.getScene().getWindow();
         stage.setScene(scene);
 
-    }
-
-    public void closeConnection(Socket socket) throws IOException{
-        InetAddress socketAddress = socket.getInetAddress();
-        socket.close();
-        Socket temp = new Socket(address, port);
-        PrintWriter out = new PrintWriter(temp.getOutputStream());
-        out.println("ServerExit");
-        out.println(socketAddress);
-        out.flush();
     }
 }

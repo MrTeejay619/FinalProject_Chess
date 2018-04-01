@@ -63,11 +63,9 @@ public class createAccountController {
 
                     System.out.println("closeConnection3");
                     socket2.shutdownInput();
-                    closeConnection(socket2);
                 } else {
                     System.out.println("closeConnection2");
                     socket2.shutdownInput();
-                    closeConnection(socket2);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "User Created!", ButtonType.OK);
                     alert.showAndWait();
                 }
@@ -86,16 +84,6 @@ public class createAccountController {
             e.printStackTrace();
         }
 
-    }
-
-    public void closeConnection(Socket socket) throws IOException{
-        InetAddress socketAddress = socket.getInetAddress();
-        socket.close();
-        Socket temp = new Socket(address, port);
-        PrintWriter out = new PrintWriter(temp.getOutputStream());
-        out.println("ServerExit");
-        out.println(socketAddress);
-        out.flush();
     }
 
 }

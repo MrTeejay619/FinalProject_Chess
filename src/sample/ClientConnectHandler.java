@@ -20,7 +20,7 @@ public class ClientConnectHandler implements Runnable {
     private String selection;
     private String port;
     //private File register = new File("C:\\Users\\Taabish\\Desktop\\GitHub\\CSCI2020_Taab\\FinalProjectServerTest","register.xml");
-    private File register = new File("/home/taabish/Desktop/CSCI2020/FinalProjectServerTest", "register.xml");
+    private File register = new File("/home/taabish/Desktop/FinalProject_Chess", "register.xml");
     private ArrayList<User> users = new ArrayList<>();
 
     private boolean empty = register.length() == 0;
@@ -51,8 +51,10 @@ public class ClientConnectHandler implements Runnable {
                 case "New User":
                     createUser();
                     break;
-                case "Get User List":
+                case "Refresh":
+                    String user = in.readLine();
                     getUserList();
+                    getChallenges(user);
                     break;
                 case "Exit":
                     exitUser();
@@ -63,8 +65,11 @@ public class ClientConnectHandler implements Runnable {
                 case "Challenge User":
                     challengeUser();
                     break;
-                case "Start Game":
-                    startGame();
+                case "Challenge":
+                    challenge();
+                    break;
+                case "Get Response":
+                    getResponse();
                     break;
             }
 
@@ -159,10 +164,9 @@ public class ClientConnectHandler implements Runnable {
         socket.shutdownInput();
         ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
         objectOut.writeObject(Server.activeUsers);
+        objectOut.flush();
+        socket.shutdownOutput();
 
-        for (String c : Server.challengeUsers){
-            if()
-        }
     }
 
     public void exitUser() throws IOException{
@@ -186,15 +190,19 @@ public class ClientConnectHandler implements Runnable {
     public void challengeUser() throws IOException {
         String opponent = in.readLine();
         String challenger = in.readLine();
+        String[] list = {opponent, challenger};
         socket.shutdownInput();
-        Server.challengeUsers.add(opponent);
+        Server.challengeUsers.add(list);
     }
 
-    public void startGame() throws IOException {
+    public void challenge() throws IOException {
         String choice = in.readLine();
         String opponent = in.readLine();
         String challenger = in.readLine();
+        String colour = in.readLine();
 
+        String[] list = {choice, opponent, challenger, colour};
+        Server.checks.add(list);
         /*
         if (choice.equals("Yes")){
             for (User c : Server.clientList){
@@ -215,6 +223,53 @@ public class ClientConnectHandler implements Runnable {
         }
         */
 
+    }
+
+    public void getChallenges(String username) throws IOException{
+        Boolean gameRequest = false;
+        String opponent = "No Opponent";
+        for (String[] c : Server.challengeUsers){
+            if(username.equals(c[0])){
+                gameRequest = true;
+                opponent = c[1];
+                break;
+            }
+        }
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        out.writeBoolean(gameRequest);
+        out.writeUTF(opponent);
+        out.flush();
+        socket.shutdownOutput();
+    }
+
+    public void getResponse() throws IOException{
+        String username = in.readLine();
+        Boolean found = false;
+        for (String[] c : Server.checks){
+            if(username.equals(c[1])){
+                if(c[0].equals("Yes")){
+                    PrintWriter out = new PrintWriter(socket.getOutputStream());
+                    out.println("Yes");
+                    out.println(c[3]);
+                    out.flush();
+                    socket.shutdownOutput();
+                    found = true;
+                } else if(c[0].equals("No")){
+                    PrintWriter out = new PrintWriter(socket.getOutputStream());
+                    out.println("NO");
+                    out.println(c[2]);
+                    out.flush();
+                    socket.shutdownOutput();
+                    found = true;
+                }
+            }
+        }
+        if(!found){
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            out.println("No Response");
+            out.flush();
+            socket.shutdownOutput();
+        }
     }
 
 }
