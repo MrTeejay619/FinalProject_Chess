@@ -24,13 +24,13 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" />
+            <PasswordField fx:id = "newPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <PasswordField fx:id = "confirmPassword"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id = "newUsername" GridPane.columnIndex="1" />
             <Label text="New Username:" />
             <Label text="New Password:" GridPane.rowIndex="1" />
             <Label text="Confirm Password:" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" onAction="#newSubmit" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </content>
