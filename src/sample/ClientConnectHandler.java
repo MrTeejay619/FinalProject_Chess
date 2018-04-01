@@ -193,7 +193,15 @@ public class ClientConnectHandler implements Runnable {
         String challenger = in.readLine();
         String[] list = {opponent, challenger};
         socket.shutdownInput();
-        Server.challengeUsers.add(list);
+
+        if (Server.challengeUsers.contains(list)){
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            out.println("In List");
+            out.flush();
+            socket.shutdownOutput();
+        } else {
+            Server.challengeUsers.add(list);
+        }
     }
 
     public void challenge() throws IOException {
@@ -266,13 +274,15 @@ public class ClientConnectHandler implements Runnable {
                         out.flush();
                         socket.shutdownOutput();
                         found = true;
+                        Server.checks.remove(c);
                     } else if (c[0].equals("No")) {
                         PrintWriter out = new PrintWriter(socket.getOutputStream());
-                        out.println("NO");
+                        out.println("No");
                         out.println(c[2]);
                         out.flush();
                         socket.shutdownOutput();
                         found = true;
+                        Server.checks.remove(c);
                     }
                 }
             }
