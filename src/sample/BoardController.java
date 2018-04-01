@@ -51,20 +51,23 @@ public class BoardController {
                 public void handle(MouseEvent mouseEvent) {
                     startingRow = gridPane.getRowIndex(n) ;
                     startingCol = gridPane.getColumnIndex(n);
+                    System.out.println(startingRow);
+                    System.out.println(startingCol);
                 }
             });
 
             n.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
                 @Override
-
-
                 public void handle(MouseEvent mouseEvent) {
                     // Makes the move
                     // returns true if move is made
+                    System.out.println(gridPane.getRowIndex(n));
+                    System.out.println(gridPane.getColumnIndex(n));
                     switch(game.movePiece(p[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
                         case 0: System.out.println("illegalMove");
                             break;
                         case 1: // TODO move is made , update the server
+                            renderBoard(game);
                             break;
                         case 2: System.out.println("illegal move ");
                             break;

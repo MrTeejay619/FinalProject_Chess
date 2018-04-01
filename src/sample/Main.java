@@ -34,10 +34,21 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        
         primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
+                try {
+                    System.out.println(currentUsername);
+                    Socket close = new Socket(address, port);
+                    PrintWriter out = new PrintWriter(close.getOutputStream());
+                    out.println("Exit");
+                    out.println(currentUsername);
+                    out.flush();
+                    close.close();
+                    System.exit(0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 new BoardStage(colour);
             }
         });
@@ -68,7 +79,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("board.fxml"));
             try {
                 Parent root = (Parent) loader.load();
-                Scene scene = new Scene(root, 300, 450);
+                Scene scene = new Scene(root, 600, 600);
                 this.setScene(scene);
             } catch (IOException e){
                 e.printStackTrace();

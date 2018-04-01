@@ -192,14 +192,7 @@ public class ClientConnectHandler implements Runnable {
         String[] list = {opponent, challenger};
         socket.shutdownInput();
 
-        if (Server.challengeUsers.contains(list)){
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            out.println("In List");
-            out.flush();
-            socket.shutdownOutput();
-        } else {
-            Server.challengeUsers.add(list);
-        }
+        Server.challengeUsers.add(list);
     }
 
     public void challenge() throws IOException {

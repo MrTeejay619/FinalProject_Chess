@@ -122,23 +122,14 @@ public class LobbyController {
                 out.println(currentUsername);
                 out.flush();
                 socket.shutdownOutput();
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
-                String selection = in.readLine();
-                socket.shutdownInput();
-                if(selection.equals("In List")){
-                    Alert alert2 = new Alert(Alert.AlertType.ERROR, user + " already has challenge pending",
-                            ButtonType.OK);
-                    alert2.showAndWait();
-                } else {
-                    getResponse();
-                }
+                socket.close();
+                getResponse();
             }
         }
     }
 
     public void getResponse() throws IOException {
-        String selection;
+        String selection = null;
         String colour = null;
         String challenger = null;
         while (true) {
@@ -226,9 +217,14 @@ public class LobbyController {
                     out2.println("Yes");
                     out2.println(challenger);
                     out2.println(currentUsername);
-                    out2.println(colour);
+                    if(colour.equals("White")){
+                        out2.println("Black");
+                    } else {
+                        out2.println("White");
+                    }
                     out2.flush();
                     socket1.shutdownOutput();
+                    startGame(colour);
                 } else if (result.get() == ButtonType.NO) {
                     Socket socket1 = new Socket(address, port);
                     PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
