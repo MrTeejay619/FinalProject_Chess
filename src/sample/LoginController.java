@@ -37,11 +37,13 @@ public class LoginController {
         try {
             Socket socket1 = new Socket(address, port);
             usernameLogin = username.getText();
+            Main.currentUsername = usernameLogin;
             PrintWriter out = new PrintWriter(socket1.getOutputStream());
             out.println("Login");
             out.println(usernameLogin);
             out.println(password.getText());
             out.flush();
+            socket1.shutdownOutput();
 
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(socket1.getInputStream()));
@@ -71,6 +73,7 @@ public class LoginController {
 
                     Stage stage = (Stage) center.getScene().getWindow();
                     stage.setScene(scene);
+                    stage.show();
 
 
                 } else if (Boolean.valueOf(in.readLine()) == false) {

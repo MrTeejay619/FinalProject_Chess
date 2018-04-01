@@ -23,6 +23,6 @@
       </MenuBar>
    </top>
    <bottom>
-      <Button fx:id="refresh" onAction= "#refreshLobby" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+      <Button fx:id="refresh" onAction= "#challengeAccept" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

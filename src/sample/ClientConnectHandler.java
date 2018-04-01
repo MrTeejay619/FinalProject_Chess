@@ -51,10 +51,11 @@ public class ClientConnectHandler implements Runnable {
                 case "New User":
                     createUser();
                     break;
-                case "Refresh":
-                    String user = in.readLine();
+                case "Get User List":
                     getUserList();
-                    getChallenges(user);
+                    break;
+                case "Refresh":
+                    getChallenges();
                     break;
                 case "Exit":
                     exitUser();
@@ -201,6 +202,8 @@ public class ClientConnectHandler implements Runnable {
         String challenger = in.readLine();
         String colour = in.readLine();
 
+        System.out.println("Got the stuff");
+
         String[] list = {choice, opponent, challenger, colour};
         Server.checks.add(list);
         /*
@@ -225,13 +228,15 @@ public class ClientConnectHandler implements Runnable {
 
     }
 
-    public void getChallenges(String username) throws IOException{
+    public void getChallenges() throws IOException{
+        String username = in.readLine();
         Boolean gameRequest = false;
         String opponent = "No Opponent";
         for (String[] c : Server.challengeUsers){
             if(username.equals(c[0])){
                 gameRequest = true;
                 opponent = c[1];
+                Server.challengeUsers.remove(c);
                 break;
             }
         }
@@ -245,6 +250,7 @@ public class ClientConnectHandler implements Runnable {
     public void getResponse() throws IOException{
         String username = in.readLine();
         Boolean found = false;
+
         for (String[] c : Server.checks){
             if(username.equals(c[1])){
                 if(c[0].equals("Yes")){
