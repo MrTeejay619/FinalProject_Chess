@@ -122,14 +122,23 @@ public class LobbyController {
                 out.println(currentUsername);
                 out.flush();
                 socket.shutdownOutput();
-                socket.close();
-                getResponse();
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(socket.getInputStream()));
+                String selection = in.readLine();
+                socket.shutdownInput();
+                if(selection.equals("In List")){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR, user + " already has challenge pending",
+                            ButtonType.OK);
+                    alert2.showAndWait();
+                } else {
+                    getResponse();
+                }
             }
         }
     }
 
     public void getResponse() throws IOException {
-        String selection = null;
+        String selection;
         String colour = null;
         String challenger = null;
         while (true) {
