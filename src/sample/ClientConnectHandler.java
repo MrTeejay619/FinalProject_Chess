@@ -1,5 +1,9 @@
 package sample;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.omg.PortableInterceptor.INACTIVE;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
@@ -14,6 +18,7 @@ public class ClientConnectHandler implements Runnable {
     private String password;
     private String username;
     private String selection;
+    private String port;
     //private File register = new File("C:\\Users\\Taabish\\Desktop\\GitHub\\CSCI2020_Taab\\FinalProjectServerTest","register.xml");
     private File register = new File("/home/taabish/Desktop/CSCI2020/FinalProjectServerTest", "register.xml");
     private ArrayList<User> users = new ArrayList<>();
@@ -57,6 +62,13 @@ public class ClientConnectHandler implements Runnable {
                 case "ServerExit":
                     serverExit();
                     break;
+                case "Challenge User":
+                    System.out.println("challenge user");
+                    challengeUser();
+                    break;
+                case "Start Game":
+                    startGame();
+                    break;
             }
 
         } catch (IOException e){
@@ -71,6 +83,7 @@ public class ClientConnectHandler implements Runnable {
     public void checkUser() throws IOException{
         username = in.readLine();
         password = in.readLine();
+        port = in.readLine();
         socket.shutdownInput();
         Boolean userExist = false;
         Boolean alreadyLoggedIn = false;
@@ -92,7 +105,7 @@ public class ClientConnectHandler implements Runnable {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         if(userExist && !alreadyLoggedIn){
             Server.activeUsers.add(username);
-            User temp = new User(username, socket);
+            User temp = new User(username, socket, Integer.valueOf(port));
             Server.clientList.add(temp);
         }
 
@@ -159,6 +172,12 @@ public class ClientConnectHandler implements Runnable {
         socket.shutdownInput();
         Server.activeUsers.remove(username);
         System.out.println("A User just Left");
+        for (User temp2 : Server.clientList){
+            if(temp2.getUsername().equals(username)){
+                Server.clientList.remove(temp2);
+                break;
+            }
+        }
         newClient();
     }
 
@@ -173,31 +192,55 @@ public class ClientConnectHandler implements Runnable {
         }
     }
 
-    public void write(InetAddress address) throws IOException {
-        System.out.println("test kek3");
-        Socket socket2 = new Socket(address, 10500);
-        //PrintWriter out = new PrintWriter(socket2.getOutputStream());
-        //out.println("List");
-        //out.flush();
-        ObjectOutputStream objectOut = new ObjectOutputStream(socket2.getOutputStream());
-        objectOut.writeUTF("List");
-        objectOut.flush();
-        objectOut.writeObject(Server.activeUsers);
-        objectOut.flush();
-        socket2.close();
-    }
-
     public void newClient() throws IOException{
         String name = in.readLine();
         System.out.println(name);
         System.out.println("test kek1");
         for (User c : Server.clientList){
-            System.out.println(c.getUsername());
-            if(c.getUsername().equals(name)) {
-                System.out.println("test kek2");
-                write(c.getSocket().getInetAddress());
+            //System.out.println(c.getUsername());
+            //System.out.println("test kek2");
+            Server.writeToAll(c.getSocket().getInetAddress(), c.getPort());
+        }
+    }
+
+    public void challengeUser() throws IOException {
+        String opponent = in.readLine();
+        String challenger = in.readLine();
+        socket.shutdownInput();
+
+        for (User c : Server.clientList){
+            if(c.getUsername().equals(opponent)){
+                System.out.println("found challenge user");
+                Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), challenger, "Accept Challenge");
+                break;
             }
         }
+
+    }
+
+    public void startGame() throws IOException {
+        String choice = in.readLine();
+        String opponent = in.readLine();
+        String challenger = in.readLine();
+
+        if (choice.equals("Yes")){
+            for (User c : Server.clientList){
+                if(c.getUsername().equals(opponent)){
+                    Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), challenger, "Start Game");
+                } else if (c.getUsername().equals(challenger)){
+                    Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), opponent, "Start Game");
+                }
+            }
+
+        } else if (choice.equals("No")){
+            for (User c : Server.clientList){
+                if(c.getUsername().equals(opponent)){
+                    Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), challenger, "Reject Game");
+                    break;
+                }
+            }
+        }
+
     }
 
 }

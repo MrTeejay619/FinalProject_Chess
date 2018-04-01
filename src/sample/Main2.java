@@ -1,3 +1,4 @@
+/*
 package sample;
 
 import javafx.application.Application;
@@ -56,3 +57,4 @@ public class Main2 extends Application {
         launch(args);
     }
 }
+*/

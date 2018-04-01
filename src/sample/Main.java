@@ -24,8 +24,8 @@ public class Main extends Application {
 
     public static String usernameLogin;
 
-    private String address = "localhost";
-    private Integer port = 1300;
+    public static String address = "localhost";
+    public static Integer port = 1300;
 
     private Button userLogin;
     private TextField username;
@@ -37,15 +37,13 @@ public class Main extends Application {
     private PasswordField confirmPassword;
     private Button newSubmit;
 
-    public static ListView<String> userList = new ListView<>();
-    private ListView<String> games = new ListView<>();
+    public ListView<String> userList = new ListView<>();
     private ArrayList<String> userNames;
     private Button refresh = new Button("Refresh");
 
-    public static GridPane tables;
+    public GridPane tables;
     private BorderPane lobbyLayout;
     private GridPane bottomLeft;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -58,9 +56,9 @@ public class Main extends Application {
 
         Label usrLabel = new Label("Username:");
         username = new TextField();
-        Label passLabel = new Label("Password");
+        Label passLabel = new Label("Password:");
         password = new PasswordField();
-
+        Label portLabel = new Label("Port:");
         userLogin = new Button("Login");
         newUser = new Button("Create New User");
         newSubmit = new Button("Submit");
@@ -71,6 +69,7 @@ public class Main extends Application {
         center.add(username, 2, 1);
         center.add(passLabel, 1, 2);
         center.add(password, 2, 2);
+        center.add(portLabel,1,3);
         center.add(userLogin, 2, 4);
         center.add(or, 2, 5);
         center.add(newUser, 2, 6);
@@ -113,7 +112,6 @@ public class Main extends Application {
                             tables = new GridPane();
 
                             primaryStage.close();
-                            new ServerConnectionListener(tables).start();
                             connectToLobby();
 
                             lobbyLayout.setCenter(tables);
@@ -244,6 +242,7 @@ public class Main extends Application {
                             center.add(username, 2, 1);
                             center.add(passLabel, 1, 2);
                             center.add(password, 2, 2);
+                            center.add(portLabel,1,3);
                             center.add(userLogin, 2, 4);
                             center.add(or, 2, 5);
                             center.add(newUser, 2, 6);
@@ -281,7 +280,6 @@ public class Main extends Application {
         socket3.shutdownInput();
         closeConnection(socket3);
 
-        /*
         ObjectInputStream objectIn = new ObjectInputStream(socket3.getInputStream());
         try {
             userNames = new ArrayList<>((ArrayList<String>) objectIn.readObject());
@@ -295,7 +293,6 @@ public class Main extends Application {
 
         userList = new ListView<>(FXCollections.observableArrayList(userNames));
         tables.add(userList, 1, 0);
-        */
     }
 
     public static void main(String[] args) {
@@ -312,28 +309,7 @@ public class Main extends Application {
         out.flush();
     }
 
-    private class ServerConnectionListener extends Thread {
 
-        private ServerSocket clientSocket;
-        GridPane tables;
 
-        public ServerConnectionListener(GridPane tables){
-            this.tables = tables;
-        }
 
-        public void run(){
-            try {
-                clientSocket = new ServerSocket(10500);
-                while (true) {
-                    Socket serverAccept = clientSocket.accept();
-                    ServerConnectionHandler handler = new ServerConnectionHandler(serverAccept, tables);
-                    Thread thread = new Thread(handler);
-                    thread.start();
-                }
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-
-    }
 }
