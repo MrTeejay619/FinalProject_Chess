@@ -94,7 +94,7 @@ public class LoginController {
     public void createUserScene() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("createAccount.fxml"));
         Parent root = (Parent)loader.load();
-        Scene scene = new Scene(root, 250, 400);
+        Scene scene = new Scene(root, 439, 230);
 
         Stage stage = (Stage) center.getScene().getWindow();
         stage.setScene(scene);

@@ -76,7 +76,7 @@ public class createAccountController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
             Parent root = (Parent) loader.load();
-            Scene scene = new Scene(root, 250, 450);
+            Scene scene = new Scene(root, 500, 500);
 
             Stage stage = (Stage) center2.getScene().getWindow();
             stage.setScene(scene);

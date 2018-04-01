@@ -10,9 +10,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 
-<TitledPane text="Create Account" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.createAccountController">
-   <content>
-      <GridPane fx:id="center2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="209.0" prefWidth="393.0">
+<?import java.net.URL?>
+
+
+      <GridPane styleClass="bg2" fx:id="center2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="209.0" prefWidth="393.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.createAccountController">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -27,11 +28,18 @@
             <PasswordField fx:id = "newPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <PasswordField fx:id = "confirmPassword"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id = "newUsername" GridPane.columnIndex="1" />
-            <Label text="New Username:" />
-            <Label text="New Password:" GridPane.rowIndex="1" />
-            <Label text="Confirm Password:" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#newSubmit" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label styleClass="text" text="New Username:" />
+            <Label styleClass="text" text="New Password:" GridPane.rowIndex="1" />
+            <Label styleClass="text" text="Confirm Password:" GridPane.rowIndex="2" />
+            <Button  styleClass="button2" mnemonicParsing="false" onAction="#newSubmit" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
+
+          <stylesheets>
+              <URL value="@style.css" />
+          </stylesheets>
       </GridPane>
-   </content>
-</TitledPane>
+
+
+
+
+

@@ -7,7 +7,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="tables" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="412.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LobbyController">
+<?import java.net.URL?>
+<BorderPane styleClass="bg3" fx:id="tables" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="412.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LobbyController">
    <left>
       <ListView fx:id="userList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </left>
@@ -23,6 +24,11 @@
       </MenuBar>
    </top>
    <bottom>
-      <Button fx:id="refresh" onAction= "#challengeAccept" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+      <Button styleClass="button"  fx:id="refresh" onAction= "#challengeAccept" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
    </bottom>
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+
 </BorderPane>
