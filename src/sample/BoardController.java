@@ -21,6 +21,7 @@ import javax.swing.*;
 
 
 public class BoardController {
+    public int numClicks;
 
     public int startingRow;
     public int startingCol;
@@ -31,17 +32,33 @@ public class BoardController {
 
 
     public void initialize() {
-        Player player1 = new Player("Black");
-        Player player2 = new Player("White");
-
+        numClicks = 1;
+        Player me = new Player(Main.colour);
         Player[] p = new Player[2];
+        p[0] = (me);
 
-        p[0] = (player1);
-        p[1] = (player2);
+
+
+        if (me.color.equals("White")){
+            Player opponent = new Player("Black");
+            p[1] = (opponent);
+        } else {
+            Player opponent = new Player("White");
+            p[1] = (opponent);
+        }
 
 
 
         Game game = new Game(p);
+        game.accept(new ChessBoardMoveVisitor(), game, p[0]);
+
+        for (Player player : p){
+            if (player.color.equals("White")){
+                player.myTurn = true;
+            } else {
+                player.myTurn = false;
+            }
+        }
 
         renderBoard(game);
 
@@ -49,45 +66,47 @@ public class BoardController {
             n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    startingRow = gridPane.getRowIndex(n) ;
-                    startingCol = gridPane.getColumnIndex(n);
-                    System.out.println(startingRow);
-                    System.out.println(startingCol);
-                }
-            });
+                    if (numClicks == 1 ){
+                        startingRow = gridPane.getRowIndex(n) ;
+                        startingCol = gridPane.getColumnIndex(n);
+                        System.out.println(startingRow);
+                        System.out.println(startingCol);
+                        System.out.println("Clicks"+ numClicks);
+                        numClicks ++;
+                    } else if (numClicks == 2){
+                        System.out.println(gridPane.getRowIndex(n));
+                        System.out.println(gridPane.getColumnIndex(n));
+                        System.out.println("Clicks"+ numClicks);
+                        game.accept(new ChessBoardMoveVisitor(), game, p[0]);
+                        switch(game.movePiece(p[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
+                            case 0: System.out.println("illegalMove");
+                                break;
+                            case 1: // TODO move is made , update the server
+                                renderBoard(game);
+                                break;
+                            case 2: System.out.println("illegal move ");
+                                break;
 
-            n.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    // Makes the move
-                    // returns true if move is made
-                    System.out.println(gridPane.getRowIndex(n));
-                    System.out.println(gridPane.getColumnIndex(n));
-                    switch(game.movePiece(p[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
-                        case 0: System.out.println("illegalMove");
-                            break;
-                        case 1: // TODO move is made , update the server
-                            renderBoard(game);
-                            break;
-                        case 2: System.out.println("illegal move ");
-                            break;
+                            case 3: System.out.println("not your colour");
+                                break;
 
-                        case 3: System.out.println("not your colour");
-                            break;
+                            case 4: System.out.println("not your turn");
+                                break;
 
-                        case 4: System.out.println("not your turn");
-                            break;
+                            case 5: System.out.println("no piece");
+                                break;
 
-                        case 5: System.out.println("no piece");
-                            break;
-
-                        case 6: System.out.println("This shouldn't happen whoopsie");
-                            break;
+                            case 6: System.out.println("This shouldn't happen whoopsie");
+                                break;
+                        }
+                        numClicks = 1;
+                    } else {
+                        numClicks = 1;
                     }
 
-
                 }
             });
+
 
         }
 

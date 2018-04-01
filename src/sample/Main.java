@@ -37,18 +37,6 @@ public class Main extends Application {
         primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                try {
-                    System.out.println(currentUsername);
-                    Socket close = new Socket(address, port);
-                    PrintWriter out = new PrintWriter(close.getOutputStream());
-                    out.println("Exit");
-                    out.println(currentUsername);
-                    out.flush();
-                    close.close();
-                    System.exit(0);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 new BoardStage(colour);
             }
         });

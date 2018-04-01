@@ -12,11 +12,8 @@ public class ChessBoardMoveVisitor implements PieceVisitor {
     }
 
     public void visit(Game game, Player player){
-        if (player.color.equals("White")){
-            game.attackedByWhite.clear();
-        } else {
-            game.attackedByBlack.clear();
-        }
+        game.attackedByBlack.clear();
+        game.attackedByWhite.clear();
         game.getOpponent(player.color).inCheck = false;
 
     }

@@ -60,6 +60,7 @@ public class Game implements Pieces{
             // check that it is your turn
             if (player.myTurn){
                 if (player.color.equals(piece.color)){
+                    piece.accept( new ChessBoardMoveVisitor(), this, player);
                     if (piece.legalMoves.contains(board[rank][file])){
                         // check if castle move
                         if (piece.pieceName.equals("K") && abs(file - piece.currFile) > 1){
@@ -104,7 +105,7 @@ public class Game implements Pieces{
                                 }
 
                                 // TODO alert
-                                System.out.println("Not Legal Move");
+                                System.out.println("Not Legal Move r0");
                                 return 0;
                             } else {
                                 piece.hasMoved = true;
@@ -139,7 +140,8 @@ public class Game implements Pieces{
 
                     } else {
                         // TODO alert
-                        System.out.println("Not Legal Move");
+                        System.out.println("Not Legal Move r2");
+
                         return 2;
                     }
                 } else {
@@ -166,10 +168,6 @@ public class Game implements Pieces{
 
     public void startBoard(Player[] players){
         // randomly assign one player as white
-        int rand = new Random().nextInt(2);
-        players[rand].color = "White";
-        players[rand].myTurn = true;
-
         // populate board
         // black starts at top of board
         board[0][0].pieceOnMe = new Rook(0,0,"Black");
@@ -287,7 +285,8 @@ public class Game implements Pieces{
     public void accept(PieceVisitor pieceVisitor, Game game, Player player){
         pieceVisitor.visit(this, player);
 
-        player.accept(pieceVisitor, game, player);
+        for (Player p: game.players)
+        p.accept(pieceVisitor, game, player);
     }
 
     public boolean checkTempMove(Player player, Piece piece, int rank, int file){

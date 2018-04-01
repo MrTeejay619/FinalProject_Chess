@@ -145,6 +145,7 @@ public class LobbyController {
             if (selection.equals("Yes")) {
                 System.out.println("Yes");
                 colour = in.readLine();
+                Main.colour = colour;
                 break;
             } else if (selection.equals("No")) {
                 challenger = in.readLine();
@@ -172,6 +173,7 @@ public class LobbyController {
     public void startGame(String colour) {
 
         Stage stage = (Stage) tables.getScene().getWindow();
+
         stage.hide();
 
     }
@@ -196,6 +198,7 @@ public class LobbyController {
         } else {
             colour = "White";
         }
+        Main.colour = colour;
 
         ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
 

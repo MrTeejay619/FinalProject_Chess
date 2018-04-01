@@ -11,11 +11,11 @@ public class Player implements Pieces{
     boolean inCheck;
     boolean inMate;
     Piece myKing;
-    Player(String name){
+    Player(String colour){
         this.name = name;
         myTurn = false;
         // starts as black, on game start one is randomly assigned white
-        color = "Black";
+        color = colour;
         piecesCaptured = new ArrayList<>();
         myPieces = new ArrayList<>();
         inCheck = false;
