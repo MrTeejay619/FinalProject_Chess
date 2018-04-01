@@ -19,7 +19,7 @@ public class ClientConnectHandler implements Runnable {
     private String username;
     private String selection;
     //private File register = new File("C:\\Users\\Taabish\\Desktop\\GitHub\\CSCI2020_Taab\\FinalProjectServerTest","register.xml");
-    private File register = new File("/home/aleem/Documents/2020/FinalProject_Chess", "register.xml");
+    private File register = new File("/home/taabish/Desktop/FinalProject_Chess", "register.xml");
     private ArrayList<User> users = new ArrayList<>();
 
     private boolean empty = register.length() == 0;
@@ -59,7 +59,8 @@ public class ClientConnectHandler implements Runnable {
                 case "Exit":
                     exitUser();
                     break;
-                case "ServerExit":
+                case "Send Move":
+                    addMove();
                     // serverExit();
                     break;
                 case "Challenge User":
@@ -70,6 +71,9 @@ public class ClientConnectHandler implements Runnable {
                     break;
                 case "Get Response":
                     getResponse();
+                    break;
+                case "Get Move":
+                    getMove();
                     break;
             }
 
@@ -249,6 +253,7 @@ public class ClientConnectHandler implements Runnable {
     public void getResponse() throws IOException{
         String username = in.readLine();
         Boolean found = false;
+        String[] temp = null;
 
         if(Server.checks.isEmpty()){
             PrintWriter out = new PrintWriter(socket.getOutputStream());
@@ -265,7 +270,7 @@ public class ClientConnectHandler implements Runnable {
                         out.flush();
                         socket.shutdownOutput();
                         found = true;
-                        Server.checks.remove(c);
+                        temp = c;
                     } else if (c[0].equals("No")) {
                         PrintWriter out = new PrintWriter(socket.getOutputStream());
                         out.println("No");
@@ -273,7 +278,7 @@ public class ClientConnectHandler implements Runnable {
                         out.flush();
                         socket.shutdownOutput();
                         found = true;
-                        Server.checks.remove(c);
+                        temp = c;
                     }
                 }
             }
@@ -282,8 +287,56 @@ public class ClientConnectHandler implements Runnable {
                 out.println("No Response");
                 out.flush();
                 socket.shutdownOutput();
+            } else if(found){
+                Server.checks.remove(temp);
             }
         }
     }
 
+    public void addMove() throws IOException{
+        String opponent = in.readLine();
+        String move1 = in.readLine();
+        String move2 = in.readLine();
+        String move3 = in.readLine();
+        String move4 = in.readLine();
+
+        String temp[] = {opponent, move1, move2, move3, move4};
+        Server.moveCheck.add(temp);
+    }
+
+    public void getMove() throws IOException{
+        String username = in.readLine();
+        Boolean found = false;
+        String[] temp = null;
+
+        if(Server.moveCheck.isEmpty()){
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            out.println("No Response");
+            out.flush();
+            socket.shutdownOutput();
+        } else {
+            for (String[] c : Server.moveCheck){
+                if(c[0].equals(username)){
+                    PrintWriter out = new PrintWriter(socket.getOutputStream());
+                    out.println("Found");
+                    out.println(c[1]);
+                    out.println(c[2]);
+                    out.println(c[3]);
+                    out.println(c[4]);
+                    out.flush();
+                    socket.shutdownOutput();
+                    found = true;
+                    temp = c;
+                }
+            }
+            if(!found){
+                PrintWriter out = new PrintWriter(socket.getOutputStream());
+                out.println("No Response");
+                out.flush();
+                socket.shutdownOutput();
+            } else if(found){
+                Server.moveCheck.remove(temp);
+            }
+        }
+    }
 }

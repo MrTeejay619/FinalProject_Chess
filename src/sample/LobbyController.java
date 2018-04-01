@@ -29,7 +29,7 @@ public class LobbyController {
     private String address = "localhost";
     private int port = 1300;
 
-    private String currentItemSelected;
+    public static String currentItemSelected;
 
     private String currentUsername = LoginController.usernameLogin;
 

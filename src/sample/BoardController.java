@@ -1,6 +1,7 @@
 package sample;
 
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -18,6 +19,11 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 
 public class BoardController {
@@ -26,6 +32,7 @@ public class BoardController {
     public int startingRow;
     public int startingCol;
 
+    public Game game;
 
     @FXML
     private GridPane gridPane;
@@ -49,7 +56,7 @@ public class BoardController {
 
 
 
-        Game game = new Game(p);
+        game = new Game(p);
         game.accept(new ChessBoardMoveVisitor(), game, p[0]);
 
         for (Player player : p){
@@ -83,6 +90,11 @@ public class BoardController {
                                 break;
                             case 1: // TODO move is made , update the server
                                 renderBoard(game);
+                                try {
+                                    sendMove(startingRow, startingCol, gridPane.getRowIndex(n), gridPane.getColumnIndex(n));
+                                } catch (IOException e){
+                                    e.printStackTrace();
+                                }
                                 break;
                             case 2: System.out.println("illegal move ");
                                 break;
@@ -149,14 +161,55 @@ public class BoardController {
         }
 
     }
-    public void sendMove(){
+
+
+    public void sendMove(int move1, int move2, int move3, int move4) throws IOException{
         //TODO Taabish
+        Socket socket = new Socket(Main.address, Main.port);
+
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
+
+        out.println("Send Move");
+        out.println(LobbyController.currentItemSelected);
+        out.println(move1);
+        out.println(move2);
+        out.println(move3);
+        out.println(move4);
+        out.flush();
+        socket.close();
+        recieveMove();
     }
 
-    public void recieveMove(){
-        //TODO Taabish
-    }
+    public void recieveMove() throws IOException{
+        String selection = null;
+        String temp[] = null;
 
+        while(true){
+            Socket socket2 = new Socket(Main.address, Main.port);
+            PrintWriter out = new PrintWriter(socket2.getOutputStream());
+            out.println("Get Move");
+            out.println(Main.currentUsername);
+            out.flush();
+            socket2.shutdownOutput();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(socket2.getInputStream()));
+            selection = in.readLine();
+
+            if(selection.equals("Found")) {
+                temp[0] = in.readLine();
+                temp[1] = in.readLine();
+                temp[2] = in.readLine();
+                temp[3] = in.readLine();
+                break;
+            } else if (selection.equals("No Response")){
+                socket2.shutdownInput();
+                socket2.close();
+                continue;
+            }
+        }
+        game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
+                Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
+    }
 }
 
 
