@@ -308,21 +308,20 @@ public class ClientConnectHandler implements Runnable {
         String username = in.readLine();
         Boolean found = false;
         String[] temp = null;
-
         if(Server.moveCheck.isEmpty()){
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            out.println("No Response");
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            out.writeUTF("No Response");
             out.flush();
             socket.shutdownOutput();
         } else {
             for (String[] c : Server.moveCheck){
                 if(c[0].equals(username)){
-                    PrintWriter out = new PrintWriter(socket.getOutputStream());
-                    out.println("Found");
-                    out.println(c[1]);
-                    out.println(c[2]);
-                    out.println(c[3]);
-                    out.println(c[4]);
+                    ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                    out.writeUTF("Found");
+                    out.writeUTF(c[1]);
+                    out.writeUTF(c[2]);
+                    out.writeUTF(c[3]);
+                    out.writeUTF(c[4]);
                     out.flush();
                     socket.shutdownOutput();
                     found = true;
@@ -330,8 +329,8 @@ public class ClientConnectHandler implements Runnable {
                 }
             }
             if(!found){
-                PrintWriter out = new PrintWriter(socket.getOutputStream());
-                out.println("No Response");
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeUTF("No Response");
                 out.flush();
                 socket.shutdownOutput();
             } else if(found){

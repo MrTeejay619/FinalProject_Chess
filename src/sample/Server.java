@@ -26,7 +26,7 @@ public class Server{
 
         public void run(){
             try {
-                serverSocket = new ServerSocket(1300);
+                serverSocket = new ServerSocket(Main.port);
                 System.out.println("Server is Up, Listening for connections");
             } catch (IOException e){
                 e.printStackTrace();

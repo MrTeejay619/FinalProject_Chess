@@ -117,6 +117,7 @@ public class LobbyController {
                 out.println("Challenge User");
                 out.println(user);
                 out.println(currentUsername);
+                Main.opponent = user;
                 out.flush();
                 socket.shutdownOutput();
                 socket.close();
@@ -214,6 +215,7 @@ public class LobbyController {
                     out2.println("Challenge");
                     out2.println("Yes");
                     out2.println(challenger);
+                    Main.opponent = challenger;
                     out2.println(currentUsername);
                     if(colour.equals("White")){
                         out2.println("Black");

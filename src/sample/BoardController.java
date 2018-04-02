@@ -2,6 +2,7 @@ package sample;
 
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import javafx.concurrent.Task;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -19,11 +20,10 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.util.Random;
+import java.util.concurrent.*;
 
 
 public class BoardController {
@@ -125,8 +125,8 @@ public class BoardController {
         if (p[0].color.equals("Black")){
             try {
                 renderBoard(game);
-                recieveMove();
-            } catch (IOException e){
+                //receiveMove();
+            } catch (Exception e){
                 e.printStackTrace();
                 System.err.println("receive failed");
             }
@@ -170,7 +170,6 @@ public class BoardController {
             gridPane.getColumnConstraints().add(new ColumnConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
             gridPane.getRowConstraints().add(new RowConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
-
     }
 
 
@@ -181,7 +180,7 @@ public class BoardController {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
 
         out.println("Send Move");
-        out.println(LobbyController.currentItemSelected);
+        out.println(Main.opponent);
         out.println(move1);
         out.println(move2);
         out.println(move3);
@@ -189,40 +188,143 @@ public class BoardController {
         out.flush();
         socket.close();
 
-        renderBoard(game);
-
-        recieveMove();
     }
 
-    public void recieveMove() throws IOException{
+    public void receiveMove() throws IOException{
         String selection = null;
-        String temp[] = null;
+        String temp[] = {"", "", "", ""};
 
-        while(true){
+        try {
+            //while(true) {
             Socket socket2 = new Socket(Main.address, Main.port);
             PrintWriter out = new PrintWriter(socket2.getOutputStream());
             out.println("Get Move");
             out.println(Main.currentUsername);
             out.flush();
             socket2.shutdownOutput();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(socket2.getInputStream()));
-            selection = in.readLine();
+            ObjectInputStream in = new ObjectInputStream(socket2.getInputStream());
 
-            if(selection.equals("Found")) {
-                temp[0] = in.readLine();
-                temp[1] = in.readLine();
-                temp[2] = in.readLine();
-                temp[3] = in.readLine();
-                break;
-            } else if (selection.equals("No Response")){
+            selection = in.readUTF();
+
+            System.out.println(selection);
+
+            if (selection.equals("Found")) {
+                temp[0] = in.readUTF();
+                temp[1] = in.readUTF();
+                temp[2] = in.readUTF();
+                temp[3] = in.readUTF();
+            } else if (selection.equals("No Response")) {
                 socket2.shutdownInput();
                 socket2.close();
-                continue;
             }
+            //}
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
+        /*
+        ExecutorService es = Executors.newFixedThreadPool(2);
+        Future<String[]> task = es.submit(new Callable<String[]>() {
+            @Override
+            public String[] call() throws Exception {
+                String selection = null;
+                String temp[] = null;
+
+                while(true){
+                    Socket socket2 = new Socket(Main.address, Main.port);
+                    PrintWriter out = new PrintWriter(socket2.getOutputStream());
+                    out.println("Get Move");
+                    out.println(Main.currentUsername);
+                    out.flush();
+                    socket2.shutdownOutput();
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(socket2.getInputStream()));
+                    selection = in.readLine();
+
+                    System.out.println(selection);
+
+                    if(selection.equals("Found")) {
+                        temp[0] = in.readLine();
+                        temp[1] = in.readLine();
+                        temp[2] = in.readLine();
+                        temp[3] = in.readLine();
+                        break;
+                    } else if (selection.equals("No Response")){
+                        socket2.shutdownInput();
+                        socket2.close();
+                        continue;
+                    }
+                }
+                return temp;
+            }
+        });
+        try {
+            temp = task.get();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        es.shutdown();
+        */
+
+        System.out.println(temp);
+        System.out.println("Test");
+
         game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
                 Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
+        renderBoard(game);
+
+        for(Node n: gridPane.getChildren()){
+            n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (numClicks == 1 ){
+                        startingRow = gridPane.getRowIndex(n) ;
+                        startingCol = gridPane.getColumnIndex(n);
+                        System.out.println(startingRow);
+                        System.out.println(startingCol);
+                        System.out.println("Clicks"+ numClicks);
+                        numClicks ++;
+                    } else if (numClicks == 2){
+                        System.out.println(gridPane.getRowIndex(n));
+                        System.out.println(gridPane.getColumnIndex(n));
+                        System.out.println("Clicks"+ numClicks);
+                        game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
+                        switch(game.movePiece(game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
+                            case 0: System.out.println("illegalMove");
+                                break;
+                            case 1: // TODO move is made , update the server
+                                renderBoard(game);
+
+                                try {
+                                    sendMove(startingRow, startingCol, gridPane.getRowIndex(n), gridPane.getColumnIndex(n));
+                                } catch (IOException e){
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case 2: System.out.println("illegal move ");
+                                break;
+
+                            case 3: System.out.println("not your colour");
+                                break;
+
+                            case 4: System.out.println("not your turn");
+                                break;
+
+                            case 5: System.out.println("no piece");
+                                break;
+
+                            case 6: System.out.println("This shouldn't happen whoopsie");
+                                break;
+                        }
+                        numClicks = 1;
+                    } else {
+                        numClicks = 1;
+                    }
+
+                }
+            });
+        }
     }
 }
 
