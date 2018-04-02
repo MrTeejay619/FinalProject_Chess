@@ -1,13 +1,8 @@
 package sample;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import org.omg.PortableInterceptor.INACTIVE;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -141,7 +136,6 @@ public class ClientConnectHandler implements Runnable {
             }
             encoder.flush();
             encoder.close();
-            System.out.println("User Successfully created");
         }
     }
 
@@ -187,7 +181,6 @@ public class ClientConnectHandler implements Runnable {
         String challenger = in.readLine();
         String colour = in.readLine();
 
-        System.out.println("Got the stuff");
 
         String[] list = {choice, opponent, challenger, colour};
         Server.checks.add(list);

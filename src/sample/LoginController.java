@@ -51,18 +51,13 @@ public class LoginController {
                 alert.showAndWait();
                 username.clear();
                 password.clear();
-                System.out.println("closeConnection5");
                 socket1.shutdownInput();
             } else {
                 if (Boolean.valueOf(in.readLine()) == true) {
                     username.clear();
                     password.clear();
 
-                    System.out.println("closeConnection4");
                     socket1.shutdownInput();
-
-
-                    //primaryStage.close();
 
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("lobby.fxml"));
                     Parent root = (Parent)loader.load();

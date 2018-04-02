@@ -42,7 +42,6 @@ public class LobbyController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
-                    System.out.println("TEST Button Click");
                     currentItemSelected = userList.getSelectionModel()
                             .getSelectedItem();
                     try {
@@ -80,7 +79,6 @@ public class LobbyController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
-                    System.out.println("TEST Button Click");
                     currentItemSelected = userList.getSelectionModel()
                             .getSelectedItem();
                     try {
@@ -95,17 +93,6 @@ public class LobbyController {
 
         socket.close();
     }
-
-    /*
-    public void closeConnection(Socket socket) throws IOException{
-        InetAddress socketAddress = socket.getInetAddress();
-        socket.close();
-        Socket temp = new Socket(address, port);
-        PrintWriter out = new PrintWriter(temp.getOutputStream());
-        out.println("ServerExit");
-        out.println(socketAddress);
-        out.flush();
-    }*/
 
     public void challengeUser(String user) throws IOException {
         if (user.equals(currentUsername)) {
@@ -145,7 +132,6 @@ public class LobbyController {
                     new InputStreamReader(socket2.getInputStream()));
             selection = in.readLine();
             if (selection.equals("Yes")) {
-                System.out.println("Yes");
                 colour = in.readLine();
                 Main.colour = colour;
                 break;
@@ -165,7 +151,6 @@ public class LobbyController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     challenger + " has rejected your challenge", ButtonType.OK);
             alert.showAndWait();
-            System.out.println("NO");
         }
 
     }
