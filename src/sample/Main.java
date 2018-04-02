@@ -68,7 +68,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("board.fxml"));
             try {
                 Parent root = (Parent) loader.load();
-                Scene scene = new Scene(root, 600, 600);
+                Scene scene = new Scene(root, 400, 450);
                 this.setScene(scene);
             } catch (IOException e){
                 e.printStackTrace();

@@ -78,6 +78,9 @@ public class Game implements Pieces{
                             } else {
                                 taken = board[rank][file].pieceOnMe;
                             }
+                            if (taken != null){
+                                board[taken.currRank][taken.currFile].pieceOnMe = null;
+                            }
                             board[rank][file].pieceOnMe = piece;
                             board[rank][file].isVacant = false;
                             board[piece.currRank][piece.currFile].pieceOnMe = null;
@@ -170,6 +173,7 @@ public class Game implements Pieces{
         // randomly assign one player as white
         // populate board
         // black starts at top of board
+
         board[0][0].pieceOnMe = new Rook(0,0,"Black");
         board[0][1].pieceOnMe = new Knight(0,1, "Black");
         board[0][2].pieceOnMe = new Bishop(0,2, "Black");

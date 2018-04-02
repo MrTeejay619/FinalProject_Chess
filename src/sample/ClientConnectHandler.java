@@ -19,7 +19,7 @@ public class ClientConnectHandler implements Runnable {
     private String username;
     private String selection;
     //private File register = new File("C:\\Users\\Taabish\\Desktop\\GitHub\\CSCI2020_Taab\\FinalProjectServerTest","register.xml");
-    private File register = new File("/home/taabish/Desktop/FinalProject_Chess", "register.xml");
+    private File register = new File("/home/aleem/Documents/2020/FinalProject_Chess", "register.xml");
     private ArrayList<User> users = new ArrayList<>();
 
     private boolean empty = register.length() == 0;

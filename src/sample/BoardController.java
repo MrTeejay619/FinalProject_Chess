@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 //import javafx.scene.image.ImageView;
 
@@ -151,10 +153,12 @@ public class BoardController {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 StackPane square = new StackPane();
+                square.setMinSize(50,50);
 
                 String color;
                 if (game.board[row][col].pieceOnMe != null) {
                     ImageView iV = new ImageView(game.board[row][col].pieceOnMe.image);
+
                     square.getChildren().add(iV);
                 }
                 if ((row + col) % 2 == 0) {
@@ -163,9 +167,11 @@ public class BoardController {
                     color = "White";
                 }
                 square.setStyle("-fx-background-color: " + color + ";");
+
                 gridPane.add(square, col, row);
             }
         }
+        gridPane.resize(300,300);
         for (int i = 0; i < size; i++) {
             gridPane.getColumnConstraints().add(new ColumnConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
             gridPane.getRowConstraints().add(new RowConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
@@ -272,6 +278,13 @@ public class BoardController {
 
         game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
                 Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
+
+        game.accept(new MateCheckVisitor(), game, game.players[0]);
+        if (game.players[0].inMate){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "ILLEGAL MOVE", ButtonType.CLOSE);
+            //TODO implement go back to lobby on close
+            alert.showAndWait();
+        }
         renderBoard(game);
 
         for(Node n: gridPane.getChildren()){
@@ -303,15 +316,23 @@ public class BoardController {
                                 }
                                 break;
                             case 2: System.out.println("illegal move ");
+                                Alert alert0 = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
+                                alert0.showAndWait();
                                 break;
 
                             case 3: System.out.println("not your colour");
+                                Alert alert1 = new Alert(Alert.AlertType.WARNING, "NOT YOUR COLOUR", ButtonType.OK);
+                                alert1.showAndWait();
                                 break;
 
                             case 4: System.out.println("not your turn");
+                                Alert alert2 = new Alert(Alert.AlertType.WARNING, "NOT YOUR TURN", ButtonType.OK);
+                                alert2.showAndWait();
                                 break;
 
                             case 5: System.out.println("no piece");
+                                Alert alert3 = new Alert(Alert.AlertType.WARNING, "NO PIECE THERE", ButtonType.OK);
+                                alert3.showAndWait();
                                 break;
 
                             case 6: System.out.println("This shouldn't happen whoopsie");
