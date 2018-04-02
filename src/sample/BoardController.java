@@ -237,54 +237,6 @@ public class BoardController {
             e.printStackTrace();
         }
 
-
-        /*
-        ExecutorService es = Executors.newFixedThreadPool(2);
-        Future<String[]> task = es.submit(new Callable<String[]>() {
-            @Override
-            public String[] call() throws Exception {
-                String selection = null;
-                String temp[] = null;
-
-                while(true){
-                    Socket socket2 = new Socket(Main.address, Main.port);
-                    PrintWriter out = new PrintWriter(socket2.getOutputStream());
-                    out.println("Get Move");
-                    out.println(Main.currentUsername);
-                    out.flush();
-                    socket2.shutdownOutput();
-                    BufferedReader in = new BufferedReader(
-                            new InputStreamReader(socket2.getInputStream()));
-                    selection = in.readLine();
-
-                    System.out.println(selection);
-
-                    if(selection.equals("Found")) {
-                        temp[0] = in.readLine();
-                        temp[1] = in.readLine();
-                        temp[2] = in.readLine();
-                        temp[3] = in.readLine();
-                        break;
-                    } else if (selection.equals("No Response")){
-                        socket2.shutdownInput();
-                        socket2.close();
-                        continue;
-                    }
-                }
-                return temp;
-            }
-        });
-        try {
-            temp = task.get();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        es.shutdown();
-        */
-
-        System.out.println(temp);
-        System.out.println("Test");
-
         game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
                 Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
 
@@ -316,7 +268,7 @@ public class BoardController {
                         switch(game.movePiece(game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
                             case 0: System.out.println("illegalMove");
                                 break;
-                            case 1: // TODO move is made , update the server
+                            case 1:
                                 renderBoard(game);
 
                                 try {
@@ -358,27 +310,3 @@ public class BoardController {
         }
     }
 }
-
-
-
-
-/*public void renderBoard(Game game) {
-        final int size = 8;
-
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                if (game.board[row][col].piecSystem.out.println("YES");eOnMe != null) {
-                    ImageView iV = new ImageView(game.board[row][col].pieceOnMe.image)
-                    getSquare(gridPane, row, col).getChildren().add(iV);
-                }
-            }
-        }
-    }*/
-
-   /* public Node getSquare(GridPane gP, int row, int col){
-        for(Node n: gP.getChildren()){
-            if (gP.getRowIndex(n) == row && gP.getColumnIndex(n) == col){
-                return n;
-            }
-        }
-    }*/
