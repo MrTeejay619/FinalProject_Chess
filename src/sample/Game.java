@@ -61,6 +61,7 @@ public class Game implements Pieces{
             if (player.myTurn){
                 if (player.color.equals(piece.color)){
                     piece.accept( new ChessBoardMoveVisitor(), this, player);
+                    //this.accept( new ChessBoardMoveVisitor(), this, this.players[1]);
                     if (piece.legalMoves.contains(board[rank][file])){
                         // check if castle move
                         if (piece.pieceName.equals("K") && abs(file - piece.currFile) > 1){
@@ -90,7 +91,9 @@ public class Game implements Pieces{
                             piece.currRank = rank;
                             piece.currFile = file;
                             // check if king is in check after move
-                            this.accept(new ChessBoardMoveVisitor(), this, getOpponent(piece.color));
+
+                            this.accept(new ChessBoardMoveVisitor(), this, this.players[1]);
+                            this.accept(new ChessBoardMoveVisitor(), this, this.players[0]);
 
                             if (player.inCheck){
                                 // revert to previous position
@@ -265,6 +268,13 @@ public class Game implements Pieces{
             return attackedByBlack;
         } else {
             return attackedByWhite;
+        }
+    }
+    public ArrayList<Square> getMyTargets(String myColor){
+        if (myColor.equals("White")){
+            return attackedByWhite;
+        } else {
+            return attackedByBlack;
         }
     }
 

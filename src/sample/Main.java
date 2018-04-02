@@ -20,7 +20,7 @@ public class Main extends Application {
     public static String address = "localhost";
     public static int port = 1300;
     public static String colour;
-    public static String opponent;
+    public static String opponent;  
 
 
     @Override
