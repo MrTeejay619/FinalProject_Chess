@@ -124,6 +124,7 @@ public class BoardController {
         }
         if (p[0].color.equals("Black")){
             try {
+                renderBoard(game);
                 recieveMove();
             } catch (IOException e){
                 e.printStackTrace();
@@ -215,7 +216,6 @@ public class BoardController {
                 temp[3] = in.readLine();
                 break;
             } else if (selection.equals("No Response")){
-                System.out.println("No Response");
                 socket2.shutdownInput();
                 socket2.close();
                 continue;

@@ -22,8 +22,6 @@ public class LoginController {
 
     public static String usernameLogin;
 
-    private String address = "localhost";
-    private int port = 1300;
 
     @FXML
     PasswordField password;
@@ -35,7 +33,7 @@ public class LoginController {
     @FXML
     public void Login(){
         try {
-            Socket socket1 = new Socket(address, port);
+            Socket socket1 = new Socket(Main.address, Main.port);
             usernameLogin = username.getText();
             Main.currentUsername = usernameLogin;
             PrintWriter out = new PrintWriter(socket1.getOutputStream());

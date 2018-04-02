@@ -26,9 +26,6 @@ public class LobbyController {
     private ListView<String> userList = new ListView<>();
     private ArrayList<String> userNames;
 
-    private String address = "localhost";
-    private int port = 1300;
-
     public static String currentItemSelected;
 
     private String currentUsername = LoginController.usernameLogin;
@@ -58,7 +55,7 @@ public class LobbyController {
     }
 
     public void refreshLobby() throws IOException {
-        Socket socket = new Socket(address, port);
+        Socket socket = new Socket(Main.address, Main.port);
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         out.println("Get User List");
         out.flush();
@@ -115,7 +112,7 @@ public class LobbyController {
                     ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.YES) {
-                Socket socket = new Socket(address, port);
+                Socket socket = new Socket(Main.address, Main.port);
                 PrintWriter out = new PrintWriter(socket.getOutputStream());
                 out.println("Challenge User");
                 out.println(user);
@@ -133,7 +130,7 @@ public class LobbyController {
         String colour = null;
         String challenger = null;
         while (true) {
-            Socket socket2 = new Socket(address, port);
+            Socket socket2 = new Socket(Main.address, Main.port);
             PrintWriter out = new PrintWriter(socket2.getOutputStream());
             out.println("Get Response");
             out.println(currentUsername);
@@ -179,7 +176,7 @@ public class LobbyController {
     public void challengeAccept() throws IOException {
         refreshLobby();
 
-        Socket socket = new Socket(address, port);
+        Socket socket = new Socket(Main.address, Main.port);
 
         PrintWriter out = new PrintWriter(socket.getOutputStream());
 
@@ -212,7 +209,7 @@ public class LobbyController {
 
             try {
                 if (result.get() == ButtonType.YES) {
-                    Socket socket1 = new Socket(address, port);
+                    Socket socket1 = new Socket(Main.address, Main.port);
                     PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
                     out2.println("Challenge");
                     out2.println("Yes");
@@ -227,7 +224,7 @@ public class LobbyController {
                     socket1.shutdownOutput();
                     startGame(colour);
                 } else if (result.get() == ButtonType.NO) {
-                    Socket socket1 = new Socket(address, port);
+                    Socket socket1 = new Socket(Main.address, Main.port);
                     PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
                     out2.println("Challenge");
                     out2.println("No");

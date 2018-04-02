@@ -17,7 +17,7 @@ import java.net.Socket;
 public class Main extends Application {
 
     public static String currentUsername;
-    public static String address = "localhost";
+    public static String address = "192.168.0.18";
     public static int port = 1300;
     public static String colour;
 

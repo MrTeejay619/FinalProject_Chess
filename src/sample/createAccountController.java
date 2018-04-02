@@ -20,9 +20,6 @@ import java.net.Socket;
 
 public class createAccountController {
 
-    private String address = "localhost";
-    private int port = 1300;
-
     @FXML
     private GridPane center2;
 
@@ -43,7 +40,7 @@ public class createAccountController {
         } else {
             try {
 
-                Socket socket2 = new Socket(address, port);
+                Socket socket2 = new Socket(Main.address, Main.port);
 
                 PrintWriter out = new PrintWriter(socket2.getOutputStream());
                 out.println("New User");
