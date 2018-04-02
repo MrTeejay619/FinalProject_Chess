@@ -59,18 +59,30 @@ public class BoardController {
 
 
         game = new Game(p);
-        game.accept(new ChessBoardMoveVisitor(), game, p[0]);
-        game.accept(new ChessBoardMoveVisitor(), game, p[1]);
+        game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
+        game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
 
-        for (Player player : p){
+        for (Player player : game.players){
             if (player.color.equals("White")){
                 player.myTurn = true;
+
             } else {
                 player.myTurn = false;
             }
+
         }
 
+
         renderBoard(game);
+        if (game.players[0].color.equals("White")){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "YOU ARE WHITE", ButtonType.CLOSE);
+            //TODO implement go back to lobby on close
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "YOU ARE BLACK", ButtonType.CLOSE);
+            //TODO implement go back to lobby on close
+            alert.showAndWait();
+        }
 
         for(Node n: gridPane.getChildren()){
             n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -87,9 +99,9 @@ public class BoardController {
                         System.out.println(gridPane.getRowIndex(n));
                         System.out.println(gridPane.getColumnIndex(n));
                         System.out.println("Clicks"+ numClicks);
-                        game.accept(new ChessBoardMoveVisitor(), game, p[0]);
-                        game.accept(new ChessBoardMoveVisitor(), game, p[1]);
-                        switch(game.movePiece(p[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
+                        game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
+                        game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
+                        switch(game.movePiece(game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
                             case 0: System.out.println("illegalMove");
                                 break;
                             case 1: // TODO move is made , update the server
@@ -126,7 +138,7 @@ public class BoardController {
 
 
         }
-        if (p[0].color.equals("Black")){
+        if (game.players[0].color.equals("Black")){
             try {
                 renderBoard(game);
                 //receiveMove();
@@ -202,6 +214,8 @@ public class BoardController {
             //TODO implement go back to lobby on close
             alert.showAndWait();
         }
+        System.out.println(game.players[0].myKing.currRank);
+        System.out.println(game.players[0].myKing.currFile);
 
     }
 
@@ -246,6 +260,8 @@ public class BoardController {
             //TODO implement go back to lobby on close
             alert.showAndWait();
         }
+        System.out.println(game.players[1].myKing.currRank);
+        System.out.println(game.players[1].myKing.currFile);
         renderBoard(game);
 
         for(Node n: gridPane.getChildren()){

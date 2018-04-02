@@ -6,8 +6,9 @@ public class ChessBoardMoveVisitor implements PieceVisitor {
     public void visit(Piece piece, Game game, Player player){
         piece.legalMoves.clear();
         piece.getLegalMoves(game);
-        if (piece.legalMoves.contains(game.board[game.getOpponent(piece.color).myKing.currRank][game.getOpponent(piece.color).myKing.currFile])){
+        if (game.getMyTargets(piece.color).contains(game.board[game.getOpponent(piece.color).myKing.currRank][game.getOpponent(piece.color).myKing.currFile])){
             game.getOpponent(piece.color).inCheck = true;
+            System.out.println("incheck");
         }
     }
 
