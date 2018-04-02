@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -36,6 +37,7 @@ public class LobbyController {
     public void initialize() throws IOException {
         refreshLobby();
 
+        new Thread(new Refresh((long)5e9, this)).start();
         userList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -70,7 +72,9 @@ public class LobbyController {
         }
 
         userList = new ListView<>(FXCollections.observableArrayList(userNames));
-        tables.setCenter(userList);
+        Platform.runLater(() -> {
+            tables.setCenter(userList);
+        });
 
         userList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -204,41 +208,43 @@ public class LobbyController {
         socket.close();
 
         if (check) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                    challenger + " has challenged you, do you accept?", ButtonType.YES, ButtonType.NO);
-            Optional<ButtonType> result = alert.showAndWait();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        challenger + " has challenged you, do you accept?", ButtonType.YES, ButtonType.NO);
+                Optional<ButtonType> result = alert.showAndWait();
 
-            try {
-                if (result.get() == ButtonType.YES) {
-                    Socket socket1 = new Socket(Main.address, Main.port);
-                    PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
-                    out2.println("Challenge");
-                    out2.println("Yes");
-                    out2.println(challenger);
-                    Main.opponent = challenger;
-                    out2.println(currentUsername);
-                    if(colour.equals("White")){
-                        out2.println("Black");
-                    } else {
-                        out2.println("White");
+                try {
+                    if (result.get() == ButtonType.YES) {
+                        Socket socket1 = new Socket(Main.address, Main.port);
+                        PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
+                        out2.println("Challenge");
+                        out2.println("Yes");
+                        out2.println(challenger);
+                        Main.opponent = challenger;
+                        out2.println(currentUsername);
+                        if(colour.equals("White")){
+                            out2.println("Black");
+                        } else {
+                            out2.println("White");
+                        }
+                        out2.flush();
+                        socket1.shutdownOutput();
+                        startGame(colour);
+                    } else if (result.get() == ButtonType.NO) {
+                        Socket socket1 = new Socket(Main.address, Main.port);
+                        PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
+                        out2.println("Challenge");
+                        out2.println("No");
+                        out2.println(challenger);
+                        out2.println(currentUsername);
+                        out2.println(colour);
+                        out2.flush();
+                        socket1.shutdownOutput();
                     }
-                    out2.flush();
-                    socket1.shutdownOutput();
-                    startGame(colour);
-                } else if (result.get() == ButtonType.NO) {
-                    Socket socket1 = new Socket(Main.address, Main.port);
-                    PrintWriter out2 = new PrintWriter(socket1.getOutputStream());
-                    out2.println("Challenge");
-                    out2.println("No");
-                    out2.println(challenger);
-                    out2.println(currentUsername);
-                    out2.println(colour);
-                    out2.flush();
-                    socket1.shutdownOutput();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            });
         }
     }
 }

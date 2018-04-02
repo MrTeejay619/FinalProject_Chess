@@ -87,6 +87,7 @@ public class LoginController {
         }
     }
 
+
     @FXML
     public void createUserScene() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("createAccount.fxml"));
