@@ -28,7 +28,7 @@
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin></TextField>
-             <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1">
+             <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Enter Password" >
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin></PasswordField>
