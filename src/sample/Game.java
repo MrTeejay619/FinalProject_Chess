@@ -90,7 +90,9 @@ public class Game implements Pieces{
                             piece.currRank = rank;
                             piece.currFile = file;
                             // check if king is in check after move
+
                             this.accept(new ChessBoardMoveVisitor(), this, getOpponent(piece.color));
+                            this.accept(new ChessBoardMoveVisitor(), this, player);
 
                             if (player.inCheck){
                                 // revert to previous position

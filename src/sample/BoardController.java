@@ -60,6 +60,7 @@ public class BoardController {
 
         game = new Game(p);
         game.accept(new ChessBoardMoveVisitor(), game, p[0]);
+        game.accept(new ChessBoardMoveVisitor(), game, p[1]);
 
         for (Player player : p){
             if (player.color.equals("White")){
@@ -87,6 +88,7 @@ public class BoardController {
                         System.out.println(gridPane.getColumnIndex(n));
                         System.out.println("Clicks"+ numClicks);
                         game.accept(new ChessBoardMoveVisitor(), game, p[0]);
+                        game.accept(new ChessBoardMoveVisitor(), game, p[1]);
                         switch(game.movePiece(p[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
                             case 0: System.out.println("illegalMove");
                                 break;
@@ -194,6 +196,13 @@ public class BoardController {
         out.flush();
         socket.close();
 
+        game.accept(new MateCheckVisitor(), game, game.players[1]);
+        if (game.players[1].inMate){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "MATE YOU WIN", ButtonType.CLOSE);
+            //TODO implement go back to lobby on close
+            alert.showAndWait();
+        }
+
     }
 
     public void receiveMove() throws IOException{
@@ -281,7 +290,7 @@ public class BoardController {
 
         game.accept(new MateCheckVisitor(), game, game.players[0]);
         if (game.players[0].inMate){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "ILLEGAL MOVE", ButtonType.CLOSE);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "MATE YOU LOOSE", ButtonType.CLOSE);
             //TODO implement go back to lobby on close
             alert.showAndWait();
         }
@@ -303,6 +312,7 @@ public class BoardController {
                         System.out.println(gridPane.getColumnIndex(n));
                         System.out.println("Clicks"+ numClicks);
                         game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
+                        game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
                         switch(game.movePiece(game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
                             case 0: System.out.println("illegalMove");
                                 break;
