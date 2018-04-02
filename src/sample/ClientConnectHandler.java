@@ -18,8 +18,7 @@ public class ClientConnectHandler implements Runnable {
     private String password;
     private String username;
     private String selection;
-    //private File register = new File("C:\\Users\\Taabish\\Desktop\\GitHub\\CSCI2020_Taab\\FinalProjectServerTest","register.xml");
-    private File register = new File("/home/aleem/Documents/2020/FinalProject_Chess", "register.xml");
+    private File register = new File("src/sample/register.xml");
     private ArrayList<User> users = new ArrayList<>();
 
     private boolean empty = register.length() == 0;
@@ -61,7 +60,6 @@ public class ClientConnectHandler implements Runnable {
                     break;
                 case "Send Move":
                     addMove();
-                    // serverExit();
                     break;
                 case "Challenge User":
                     challengeUser();
@@ -80,10 +78,6 @@ public class ClientConnectHandler implements Runnable {
         } catch (IOException e){
             e.printStackTrace();
         }
-    }
-
-    public Socket getSocket() {
-        return socket;
     }
 
     public void checkUser() throws IOException{
@@ -178,18 +172,6 @@ public class ClientConnectHandler implements Runnable {
         Server.activeUsers.remove(username);
     }
 
-    /*
-    public void serverExit() throws IOException {
-        String temp = in.readLine();
-        socket.shutdownInput();
-        for (User temp2 : Server.clientList){
-            if(temp2.getSocket().getInetAddress().toString().equals(temp)){
-                Server.clientList.remove(temp2);
-                break;
-            }
-        }
-    }*/
-
     public void challengeUser() throws IOException {
         String opponent = in.readLine();
         String challenger = in.readLine();
@@ -209,25 +191,6 @@ public class ClientConnectHandler implements Runnable {
 
         String[] list = {choice, opponent, challenger, colour};
         Server.checks.add(list);
-        /*
-        if (choice.equals("Yes")){
-            for (User c : Server.clientList){
-                if(c.getUsername().equals(opponent)){
-                    Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), challenger, "Start Game");
-                } else if (c.getUsername().equals(challenger)){
-                    Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), opponent, "Start Game");
-                }
-            }
-
-        } else if (choice.equals("No")){
-            for (User c : Server.clientList){
-                if(c.getUsername().equals(opponent)){
-                    Server.writeToOne(c.getSocket().getInetAddress(), c.getPort(), challenger, "Reject Game");
-                    break;
-                }
-            }
-        }
-        */
 
     }
 
