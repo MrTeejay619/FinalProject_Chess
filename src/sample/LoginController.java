@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class LoginController {
 
-    public static String usernameLogin;
+    private String usernameLogin;
 
 
     @FXML

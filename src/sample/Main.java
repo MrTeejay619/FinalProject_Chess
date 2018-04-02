@@ -20,13 +20,14 @@ public class Main extends Application {
     public static String address = "localhost";
     public static int port = 1300;
     public static String colour;
-    public static String opponent;  
+    public static String opponent;
+    private Stage firstStage;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-
+        firstStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = (Parent)loader.load();
@@ -39,13 +40,22 @@ public class Main extends Application {
             @Override
             public void handle(WindowEvent windowEvent) {
                 new BoardStage(colour);
+                try {
+                    Socket close = new Socket(address, port);
+                    PrintWriter out = new PrintWriter(close.getOutputStream());
+                    out.println("Exit");
+                    out.println(currentUsername);
+                    out.flush();
+                    close.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 try {
-                    System.out.println(currentUsername);
                     Socket close = new Socket(address, port);
                     PrintWriter out = new PrintWriter(close.getOutputStream());
                     out.println("Exit");
@@ -75,6 +85,24 @@ public class Main extends Application {
                 System.out.println("Failed to load fxml");
             }
             this.show();
+
+
+            this.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent windowEvent) {
+                    try {
+                        Socket close = new Socket(address, port);
+                        PrintWriter out = new PrintWriter(close.getOutputStream());
+                        out.println("Join");
+                        out.println(currentUsername);
+                        out.flush();
+                        close.close();
+                        firstStage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 

@@ -68,11 +68,20 @@ public class ClientConnectHandler implements Runnable {
                 case "Get Move":
                     getMove();
                     break;
+                case "Join":
+                    join();
+                    break;
             }
 
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void join() throws IOException{
+        username = in.readLine();
+        socket.shutdownInput();
+        Server.activeUsers.add(username);
     }
 
     public void checkUser() throws IOException{

@@ -29,7 +29,7 @@ public class LobbyController {
 
     public static String currentItemSelected;
 
-    private String currentUsername = LoginController.usernameLogin;
+    private String currentUsername = Main.currentUsername;
 
     @FXML
     private BorderPane tables;
@@ -37,7 +37,7 @@ public class LobbyController {
     public void initialize() throws IOException {
         refreshLobby();
 
-        new Thread(new Refresh((long)5e9, this)).start();
+        new Thread(new Refresh((long)2e9, this)).start();
         userList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -146,7 +146,7 @@ public class LobbyController {
         }
         if (selection.equals("Yes")) {
             // TODO: Start new Game
-            startGame(colour);
+            startGame();
         } else if (selection.equals("No")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     challenger + " has rejected your challenge", ButtonType.OK);
@@ -155,7 +155,7 @@ public class LobbyController {
 
     }
 
-    public void startGame(String colour) {
+    public void startGame() {
 
         Stage stage = (Stage) tables.getScene().getWindow();
 
@@ -214,7 +214,7 @@ public class LobbyController {
                         }
                         out2.flush();
                         socket1.shutdownOutput();
-                        startGame(colour);
+                        startGame();
                     } else if (result.get() == ButtonType.NO) {
                         Socket socket1 = new Socket(Main.address, Main.port);
                         PrintWriter out2 = new PrintWriter(socket1.getOutputStream());

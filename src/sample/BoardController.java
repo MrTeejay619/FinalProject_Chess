@@ -2,6 +2,7 @@ package sample;
 
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.*;
 import javafx.fxml.FXML;
@@ -37,10 +38,13 @@ public class BoardController {
     public Game game;
 
     @FXML
-    private GridPane gridPane;
+    private volatile GridPane gridPane;
 
 
     public void initialize() {
+
+        new Thread(new Refresh((long)2e9, this)).start();
+
         numClicks = 1;
         Player me = new Player(Main.colour);
         Player[] p = new Player[2];
@@ -224,7 +228,6 @@ public class BoardController {
         String temp[] = {"", "", "", ""};
 
         try {
-            //while(true) {
             Socket socket2 = new Socket(Main.address, Main.port);
             PrintWriter out = new PrintWriter(socket2.getOutputStream());
             out.println("Get Move");
@@ -242,17 +245,17 @@ public class BoardController {
                 temp[1] = in.readUTF();
                 temp[2] = in.readUTF();
                 temp[3] = in.readUTF();
+
+                game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
+                        Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
+
             } else if (selection.equals("No Response")) {
                 socket2.shutdownInput();
                 socket2.close();
             }
-            //}
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
-                Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
 
         game.accept(new MateCheckVisitor(), game, game.players[0]);
         if (game.players[0].inMate){
@@ -262,67 +265,73 @@ public class BoardController {
         }
         System.out.println(game.players[1].myKing.currRank);
         System.out.println(game.players[1].myKing.currFile);
-        renderBoard(game);
 
-        for(Node n: gridPane.getChildren()){
-            n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (numClicks == 1 ){
-                        startingRow = gridPane.getRowIndex(n) ;
-                        startingCol = gridPane.getColumnIndex(n);
-                        System.out.println(startingRow);
-                        System.out.println(startingCol);
-                        System.out.println("Clicks"+ numClicks);
-                        numClicks ++;
-                    } else if (numClicks == 2){
-                        System.out.println(gridPane.getRowIndex(n));
-                        System.out.println(gridPane.getColumnIndex(n));
-                        System.out.println("Clicks"+ numClicks);
-                        game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
-                        game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
-                        switch(game.movePiece(game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
-                            case 0: System.out.println("illegalMove");
-                                break;
-                            case 1:
-                                renderBoard(game);
+        Platform.runLater(() -> {
+            renderBoard(game);
+            for(Node n: gridPane.getChildren()) {
+                n.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        if (numClicks == 1) {
+                            startingRow = gridPane.getRowIndex(n);
+                            startingCol = gridPane.getColumnIndex(n);
+                            System.out.println(startingRow);
+                            System.out.println(startingCol);
+                            System.out.println("Clicks" + numClicks);
+                            numClicks++;
+                        } else if (numClicks == 2) {
+                            System.out.println(gridPane.getRowIndex(n));
+                            System.out.println(gridPane.getColumnIndex(n));
+                            System.out.println("Clicks" + numClicks);
+                            game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
+                            game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
+                            switch (game.movePiece(game.players[0], game.board[startingRow][startingCol].pieceOnMe, gridPane.getRowIndex(n), gridPane.getColumnIndex(n))) {
+                                case 0:
+                                    System.out.println("illegalMove");
+                                    break;
+                                case 1:
+                                    renderBoard(game);
+                                    try {
+                                        sendMove(startingRow, startingCol, gridPane.getRowIndex(n), gridPane.getColumnIndex(n));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                case 2:
+                                    System.out.println("illegal move ");
+                                    Alert alert0 = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
+                                    alert0.showAndWait();
+                                    break;
 
-                                try {
-                                    sendMove(startingRow, startingCol, gridPane.getRowIndex(n), gridPane.getColumnIndex(n));
-                                } catch (IOException e){
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case 2: System.out.println("illegal move ");
-                                Alert alert0 = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
-                                alert0.showAndWait();
-                                break;
+                                case 3:
+                                    System.out.println("not your colour");
+                                    Alert alert1 = new Alert(Alert.AlertType.WARNING, "NOT YOUR COLOUR", ButtonType.OK);
+                                    alert1.showAndWait();
+                                    break;
 
-                            case 3: System.out.println("not your colour");
-                                Alert alert1 = new Alert(Alert.AlertType.WARNING, "NOT YOUR COLOUR", ButtonType.OK);
-                                alert1.showAndWait();
-                                break;
+                                case 4:
+                                    System.out.println("not your turn");
+                                    Alert alert2 = new Alert(Alert.AlertType.WARNING, "NOT YOUR TURN", ButtonType.OK);
+                                    alert2.showAndWait();
+                                    break;
 
-                            case 4: System.out.println("not your turn");
-                                Alert alert2 = new Alert(Alert.AlertType.WARNING, "NOT YOUR TURN", ButtonType.OK);
-                                alert2.showAndWait();
-                                break;
+                                case 5:
+                                    System.out.println("no piece");
+                                    Alert alert3 = new Alert(Alert.AlertType.WARNING, "NO PIECE THERE", ButtonType.OK);
+                                    alert3.showAndWait();
+                                    break;
 
-                            case 5: System.out.println("no piece");
-                                Alert alert3 = new Alert(Alert.AlertType.WARNING, "NO PIECE THERE", ButtonType.OK);
-                                alert3.showAndWait();
-                                break;
-
-                            case 6: System.out.println("This shouldn't happen whoopsie");
-                                break;
+                                case 6:
+                                    System.out.println("This shouldn't happen whoopsie");
+                                    break;
+                            }
+                            numClicks = 1;
+                        } else {
+                            numClicks = 1;
                         }
-                        numClicks = 1;
-                    } else {
-                        numClicks = 1;
                     }
-
-                }
-            });
-        }
+                });
+            }
+        });
     }
 }
