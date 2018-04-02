@@ -151,7 +151,6 @@ public class LobbyController {
                 challenger = in.readLine();
                 break;
             } else if (selection.equals("No Response")) {
-                System.out.println("TEST Response");
                 socket2.shutdownInput();
                 socket2.close();
                 continue;
@@ -159,7 +158,6 @@ public class LobbyController {
         }
         if (selection.equals("Yes")) {
             // TODO: Start new Game
-            System.out.println("YES");
             startGame(colour);
         } else if (selection.equals("No")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,

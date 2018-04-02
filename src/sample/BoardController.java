@@ -90,6 +90,7 @@ public class BoardController {
                                 break;
                             case 1: // TODO move is made , update the server
                                 renderBoard(game);
+
                                 try {
                                     sendMove(startingRow, startingCol, gridPane.getRowIndex(n), gridPane.getColumnIndex(n));
                                 } catch (IOException e){
@@ -121,6 +122,15 @@ public class BoardController {
 
 
         }
+        if (p[0].color.equals("Black")){
+            try {
+                recieveMove();
+            } catch (IOException e){
+                e.printStackTrace();
+                System.err.println("receive failed");
+            }
+        }
+
 
 
     }
@@ -177,6 +187,9 @@ public class BoardController {
         out.println(move4);
         out.flush();
         socket.close();
+
+        renderBoard(game);
+
         recieveMove();
     }
 
@@ -202,6 +215,7 @@ public class BoardController {
                 temp[3] = in.readLine();
                 break;
             } else if (selection.equals("No Response")){
+                System.out.println("No Response");
                 socket2.shutdownInput();
                 socket2.close();
                 continue;
@@ -220,7 +234,7 @@ public class BoardController {
 
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                if (game.board[row][col].pieceOnMe != null) {
+                if (game.board[row][col].piecSystem.out.println("YES");eOnMe != null) {
                     ImageView iV = new ImageView(game.board[row][col].pieceOnMe.image)
                     getSquare(gridPane, row, col).getChildren().add(iV);
                 }
