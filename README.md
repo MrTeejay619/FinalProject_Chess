@@ -45,5 +45,7 @@ Program will have to be downloaded and compiled with IntelliJ
 
 ## Caveats
 - chessboards and alerts will appear on top of one another. This would not be an issue if being played on seperate clients.
--the server ports are hard coded to work over localhost for your testing purposes. the port selection scene was omitted intentionally
+- the server ports are hard coded to work over localhost for your testing purposes. the port selection scene was omitted intentionally
+- Unable to get gradle to work with project
+
 
