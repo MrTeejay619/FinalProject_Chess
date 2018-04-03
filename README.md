@@ -27,11 +27,11 @@ Program will have to be downloaded and compiled with IntelliJ
 
 - Logging into an account takes that client to the lobby, wait for the other player to be automatically added to the lobby when the second client is logged in.
 
-- From one client double click on a username to chalenge them to a game. then confirm your selection
+- From one client double click on a username to challenge them to a game. then confirm your selection
 
-- the second client will automatically recieve a notification that they have been challenged. Accept it
+- the second client will automatically receive a notification that they have been challenged. Accept it
 
-- Accepting the chalenge brings you to the game stage where the player who is randomly selected to be white will make the first move.
+- Accepting the challenge brings you to the game stage where the player who is randomly selected to be white will make the first move.
 
 - play a game of chess where your client is updated automatically when your opponent makes a move.
 
@@ -41,12 +41,11 @@ Program will have to be downloaded and compiled with IntelliJ
 ## Bugs
 
 1. If a User has a pending challenge or has challenged another user they should be removed from the lobby.
-3. Checkmate breaks the board so the mate checker is removed
-4. On any Compilation errors rebuild the project
-5. Upon starting a new game after previously returning to the lobby, sometimes the auto refresh does not work. Simply start a new game if this is the case.
-
+2. Checkmate breaks the board so the mate checker is removed
+3. On any Compilation errors rebuild the project
+4. Small chance for refresher breaking
 
 ## Caveats
-- chessboards and alerts will apear on top of one another. This would not be an issue if being played on seperate clients.
+- chessboards and alerts will appear on top of one another. This would not be an issue if being played on seperate clients.
 -the server ports are hard coded to work over localhost for your testing purposes. the port selection scene was omitted intentionally
 
