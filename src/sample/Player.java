@@ -25,12 +25,13 @@ public class Player implements Pieces{
     @Override
     public void accept(PieceVisitor pieceVisitor, Game game, Player player){
         for (Piece p : myPieces){
-            if (p.pieceName.equals("K")){
+            if (!p.pieceName.equals("K")){
                 p.accept(pieceVisitor, game, player);
             }
-            // king is checked last
-            myKing.accept(pieceVisitor, game, player);
+
         }
+        // king is checked last
+        myKing.accept(pieceVisitor, game, player);
 
     }
 

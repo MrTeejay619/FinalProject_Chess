@@ -54,13 +54,13 @@ public class Game implements Pieces{
     }
     // move is not piece based
     // leaving it in the driver class Game
-    public int movePiece(Player player, Piece piece, int rank, int file){
+    public int movePiece(Game game, Player player, Piece piece, int rank, int file){
         // check that the square clicked has a piece
         if  (piece != null){
             // check that it is your turn
             if (player.myTurn){
                 if (player.color.equals(piece.color)){
-                    piece.accept( new ChessBoardMoveVisitor(), this, player);
+                    game.accept( new ChessBoardMoveVisitor(), this, player);
                     //this.accept( new ChessBoardMoveVisitor(), this, this.players[1]);
                     if (piece.legalMoves.contains(board[rank][file])){
                         // check if castle move
@@ -70,7 +70,7 @@ public class Game implements Pieces{
                             // make move
                             Piece taken;
                             // check if en passent
-                            if (piece.pieceName.equals("P") && file != piece.currFile && board[rank][file].isVacant){
+                            if (piece.pieceName.equals("P") && file != piece.currFile && board[rank][file].isVacant && piece.lastMove ==2){
                                 if (piece.color.equals("Black")){
                                     taken = board[rank - 1][file].pieceOnMe;
                                 } else {
@@ -128,6 +128,7 @@ public class Game implements Pieces{
                                     } else if (rank == 7 && piece.color.equals("Black")){
                                         promote(piece);
                                     }
+
                                 }
 
                                 this.accept(new ChessBoardMoveVisitor(), this, player);
@@ -299,8 +300,9 @@ public class Game implements Pieces{
     public void accept(PieceVisitor pieceVisitor, Game game, Player player){
         pieceVisitor.visit(this, player);
 
-        for (Player p: game.players)
-        p.accept(pieceVisitor, game, player);
+        for (Player p: game.players) {
+            p.accept(pieceVisitor, game, player);
+        }
     }
 
     public boolean checkTempMove(Player player, Piece piece, int rank, int file){

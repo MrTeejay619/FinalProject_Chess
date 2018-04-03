@@ -105,7 +105,7 @@ public class BoardController {
                         System.out.println("Clicks"+ numClicks);
                         game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
                         game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
-                        switch(game.movePiece(game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
+                        switch(game.movePiece(game, game.players[0] ,game.board[startingRow ][startingCol].pieceOnMe ,gridPane.getRowIndex(n) , gridPane.getColumnIndex(n))){
                             case 0: System.out.println("illegalMove");
                                 break;
                             case 1: // TODO move is made , update the server
@@ -212,7 +212,7 @@ public class BoardController {
         out.flush();
         socket.close();
 
-        game.accept(new MateCheckVisitor(), game, game.players[1]);
+        //game.accept(new MateCheckVisitor(), game, game.players[1]);
         if (game.players[1].inMate){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "MATE YOU WIN", ButtonType.CLOSE);
             //TODO implement go back to lobby on close
@@ -228,6 +228,7 @@ public class BoardController {
         String temp[] = {"", "", "", ""};
 
         try {
+            //while(true) {
             Socket socket2 = new Socket(Main.address, Main.port);
             PrintWriter out = new PrintWriter(socket2.getOutputStream());
             out.println("Get Move");
@@ -246,25 +247,24 @@ public class BoardController {
                 temp[2] = in.readUTF();
                 temp[3] = in.readUTF();
 
-                game.movePiece(game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
+                game.movePiece(game, game.players[1], game.board[Integer.valueOf(temp[0])][Integer.valueOf(temp[1])].pieceOnMe,
                         Integer.valueOf(temp[2]), Integer.valueOf(temp[3]));
 
             } else if (selection.equals("No Response")) {
                 socket2.shutdownInput();
                 socket2.close();
             }
+            //}
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        game.accept(new MateCheckVisitor(), game, game.players[0]);
+        //game.accept(new MateCheckVisitor(), game, game.players[0]);
         if (game.players[0].inMate){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "MATE YOU LOOSE", ButtonType.CLOSE);
             //TODO implement go back to lobby on close
             alert.showAndWait();
         }
-        System.out.println(game.players[1].myKing.currRank);
-        System.out.println(game.players[1].myKing.currFile);
 
         Platform.runLater(() -> {
             renderBoard(game);
@@ -285,9 +285,11 @@ public class BoardController {
                             System.out.println("Clicks" + numClicks);
                             game.accept(new ChessBoardMoveVisitor(), game, game.players[0]);
                             game.accept(new ChessBoardMoveVisitor(), game, game.players[1]);
-                            switch (game.movePiece(game.players[0], game.board[startingRow][startingCol].pieceOnMe, gridPane.getRowIndex(n), gridPane.getColumnIndex(n))) {
+                            switch (game.movePiece(game, game.players[0], game.board[startingRow][startingCol].pieceOnMe, gridPane.getRowIndex(n), gridPane.getColumnIndex(n))) {
                                 case 0:
                                     System.out.println("illegalMove");
+                                    Alert alert00 = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
+                                    alert00.showAndWait();
                                     break;
                                 case 1:
                                     renderBoard(game);
