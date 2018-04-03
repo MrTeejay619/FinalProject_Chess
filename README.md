@@ -39,7 +39,7 @@ Program will have to be downloaded and compiled with IntelliJ
 ## Bugs
 
 1. If a User has a pending challenge or has challenged another user they should be removed from the lobby.
-2. Checkmate breaks the board so the mate checker is removed
+2. Checkmate breaks the board so the mate checker is removed, however game can be played till completion and no moves can be made after. There's just no pop up for it. 
 3. On any Compilation errors rebuild the project
 4. Small chance for refresher breaking
 
