@@ -90,17 +90,7 @@ public class Main extends Application {
             this.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent windowEvent) {
-                    try {
-                        Socket close = new Socket(address, port);
-                        PrintWriter out = new PrintWriter(close.getOutputStream());
-                        out.println("Join");
-                        out.println(currentUsername);
-                        out.flush();
-                        close.close();
-                        firstStage.show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    System.exit(0);
                 }
             });
         }

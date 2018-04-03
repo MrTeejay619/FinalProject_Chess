@@ -21,6 +21,7 @@ import javafx.scene.image.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.WindowEvent;
 
 import javax.swing.*;
 import java.io.*;
@@ -43,7 +44,8 @@ public class BoardController {
 
     public void initialize() {
 
-        new Thread(new Refresh((long)2e9, this)).start();
+        Thread thread = new Thread(new Refresh((long)2e9, this));
+        thread.start();
 
         numClicks = 1;
         Player me = new Player(Main.colour);
