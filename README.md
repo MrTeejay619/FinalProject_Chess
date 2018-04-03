@@ -35,8 +35,6 @@ Program will have to be downloaded and compiled with IntelliJ
 
 - play a game of chess where your client is updated automatically when your opponent makes a move.
 
-- close the game window to be returned to the lobby
-
 
 ## Bugs
 
