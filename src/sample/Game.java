@@ -81,6 +81,7 @@ public class Game implements Pieces{
                             }
                             if (taken != null){
                                 board[taken.currRank][taken.currFile].pieceOnMe = null;
+                                this.getOpponent(piece.color).myPieces.remove(taken);
                             }
                             board[rank][file].pieceOnMe = piece;
                             board[rank][file].isVacant = false;
@@ -90,6 +91,7 @@ public class Game implements Pieces{
                             int oldFile = piece.currFile;
                             piece.currRank = rank;
                             piece.currFile = file;
+
                             // check if king is in check after move
 
                             this.accept(new ChessBoardMoveVisitor(), this, this.players[1]);
@@ -105,6 +107,7 @@ public class Game implements Pieces{
 
                                 if (taken != null){
                                     board[taken.currRank][taken.currFile].pieceOnMe = taken;
+                                    this.getOpponent(piece.color).myPieces.add(taken);
                                 } else {
                                     board[rank][file].pieceOnMe = null;
                                     board[rank][file].isVacant = true;

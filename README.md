@@ -7,7 +7,7 @@ Repository Link: https://github.com/aleemalibhai/FinalProject_Chess
 
 ## Contributions
 
-Aleem Alibhai - 
+Aleem Alibhai - Game driver. All move functionality and board updates. Visitors to check for legal moves and Mate. all logic behind where a piece can move and how a piece can move so that all rules are followed. Worked on lobby, board and create account controllers. Also lots of debugging. helped with some threads and gui.
 
 Taabish Jeshani - Worked on implementing Server sockets, client sockets, and all thread related programming. Whenever a user would 
 call on the server that code was implemented by Taabish. Login Controller, Lobby controller, Create account controller and all
@@ -19,10 +19,34 @@ Karan Damodar - GUI for all scenes, board creation and board population based on
 ## How to use
 
 Program will have to be downloaded and compiled with IntelliJ
+- Set the run configuration to Server (from the drop down beside the run button) run an instance of the Server.
 
+- Set the run configuration to Main (from the drop down beside the run button) run two instances of Main
+
+- Log in to the server on each client using our premade test accounts test:1, test2:1 (Username:Password) or make your own accounts
+
+- Logging into an account takes that client to the lobby, wait for the other player to be automatically added to the lobby when the second client is logged in.
+
+- From one client double click on a username to chalenge them to a game. then confirm your selection
+
+- the second client will automatically recieve a notification that they have been challenged. Accept it
+
+- Accepting the chalenge brings you to the game stage where the player who is randomly selected to be white will make the first move.
+
+- play a game of chess where your client is updated automatically when your opponent makes a move.
+
+- close the game window to be returned to the lobby
 
 
 ## Bugs
 
 1. If a User has a pending challenge or has challenged another user they should be removed from the lobby.
-2. If two Users are in a game they should be removed from lobby and when they finish their game they should be added back to the lobby.
+3. Checkmate breaks the board so the mate checker is removed
+4. On any Compilation errors rebuild the project
+5. Upon starting a new game after previously returning to the lobby, sometimes the auto refresh does not work. Simply start a new game if this is the case.
+
+
+## Caveats
+- chessboards and alerts will apear on top of one another. This would not be an issue if being played on seperate clients.
+-the server ports are hard coded to work over localhost for your testing purposes. the port selection scene was omitted intentionally
+

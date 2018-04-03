@@ -25,6 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.*;
 
@@ -39,7 +40,6 @@ public class BoardController {
 
     @FXML
     private volatile GridPane gridPane;
-
 
     public void initialize() {
 
@@ -156,14 +156,6 @@ public class BoardController {
 
     }
 
-    public void addPane(GridPane gp,int colIndex, int rowIndex) {
-        Pane pane = new Pane();
-        pane.setOnMouseClicked(e -> {
-            System.out.printf("Mouse enetered cell [%d, %d]%n", colIndex, rowIndex);
-        });
-        gp.add(pane, colIndex, rowIndex);
-    }
-
 
     public void renderBoard(Game game){
         final int size = 8;
@@ -218,9 +210,6 @@ public class BoardController {
             //TODO implement go back to lobby on close
             alert.showAndWait();
         }
-        System.out.println(game.players[0].myKing.currRank);
-        System.out.println(game.players[0].myKing.currFile);
-
     }
 
     public void receiveMove() throws IOException{
@@ -238,8 +227,6 @@ public class BoardController {
             ObjectInputStream in = new ObjectInputStream(socket2.getInputStream());
 
             selection = in.readUTF();
-
-            System.out.println(selection);
 
             if (selection.equals("Found")) {
                 temp[0] = in.readUTF();
@@ -288,8 +275,10 @@ public class BoardController {
                             switch (game.movePiece(game, game.players[0], game.board[startingRow][startingCol].pieceOnMe, gridPane.getRowIndex(n), gridPane.getColumnIndex(n))) {
                                 case 0:
                                     System.out.println("illegalMove");
-                                    Alert alert00 = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
-                                    alert00.showAndWait();
+                                    Alert alert = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
+                                    Optional<ButtonType> result = alert.showAndWait();
+                                    if (result.get() == ButtonType.YES) {numClicks = 1;}
+
                                     break;
                                 case 1:
                                     renderBoard(game);
@@ -298,33 +287,40 @@ public class BoardController {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
+                                    numClicks = 1;
                                     break;
                                 case 2:
                                     System.out.println("illegal move ");
                                     Alert alert0 = new Alert(Alert.AlertType.WARNING, "ILLEGAL MOVE", ButtonType.OK);
-                                    alert0.showAndWait();
+                                    Optional<ButtonType> result0 = alert0.showAndWait();
+                                    if (result0.get() == ButtonType.YES) {numClicks = 1;}
                                     break;
 
                                 case 3:
                                     System.out.println("not your colour");
                                     Alert alert1 = new Alert(Alert.AlertType.WARNING, "NOT YOUR COLOUR", ButtonType.OK);
-                                    alert1.showAndWait();
+                                    Optional<ButtonType> result1 = alert1.showAndWait();
+                                    if (result1.get() == ButtonType.YES) {numClicks = 1;}
+
                                     break;
 
                                 case 4:
                                     System.out.println("not your turn");
                                     Alert alert2 = new Alert(Alert.AlertType.WARNING, "NOT YOUR TURN", ButtonType.OK);
-                                    alert2.showAndWait();
+                                    Optional<ButtonType> result2 = alert2.showAndWait();
+                                    if (result2.get() == ButtonType.YES) {numClicks = 1;}
                                     break;
 
                                 case 5:
                                     System.out.println("no piece");
                                     Alert alert3 = new Alert(Alert.AlertType.WARNING, "NO PIECE THERE", ButtonType.OK);
-                                    alert3.showAndWait();
+                                    Optional<ButtonType> result3 = alert3.showAndWait();
+                                    if (result3.get() == ButtonType.YES) {numClicks = 1;}
                                     break;
 
                                 case 6:
                                     System.out.println("This shouldn't happen whoopsie");
+                                    numClicks = 1;
                                     break;
                             }
                             numClicks = 1;

@@ -47,7 +47,7 @@ public class Pawn extends Piece{
         // squares that piece attacks
         if (this.color.equals("Black")){
             // bottom left
-            if(currRank + 1 < 8 && currFile -1 >= 0){
+            if(currRank + 1 < 8 && currFile -1 >= 0 && game.board[currRank +1][currFile -1].pieceOnMe != null){
                 game.attack(game.board[currRank +1][currFile -1], this.color);
                 if (game.board[currRank +1][currFile -1].isVacant
                         || !game.board[currRank +1][currFile -1].pieceOnMe.color.equals(this.color)){
@@ -56,7 +56,7 @@ public class Pawn extends Piece{
                 }
             }
             //bottom right
-            if(currRank + 1 < 8 && currFile +1 < 7){
+            if(currRank + 1 < 8 && currFile +1 < 7 && game.board[currRank +1][currFile +1].pieceOnMe != null){
                 game.attack(game.board[currRank +1][currFile +1], this.color);
                 if (game.board[currRank +1][currFile +1].isVacant
                         || !game.board[currRank +1][currFile +1].pieceOnMe.color.equals(this.color)){
